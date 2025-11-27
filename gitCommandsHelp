@@ -1,0 +1,5 @@
+`git checkout branchname` -> change what branch you are working in
+`git checkout -b branchname` -> make a new branch
+`git add .` -> stage all changed files
+`git commit -m "message"` -> commit changes with message
+`git push -u origin branchname` -> push newly made branch to github
