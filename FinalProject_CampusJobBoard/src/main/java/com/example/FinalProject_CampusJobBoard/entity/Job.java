@@ -1,5 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.entity;
 
+import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -32,7 +33,6 @@ public class Job {
 
     @Column(length = 50)
     private String category;
-
 
     private LocalDate deadline;
 
