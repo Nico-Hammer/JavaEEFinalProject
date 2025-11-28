@@ -1,10 +1,13 @@
 package com.example.FinalProject_CampusJobBoard.entity;
 
+import com.example.FinalProject_CampusJobBoard.enums.UserRoles;
 import com.example.FinalProject_CampusJobBoard.enums.UserStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -23,6 +26,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRoles role = UserRoles.STUDENT;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

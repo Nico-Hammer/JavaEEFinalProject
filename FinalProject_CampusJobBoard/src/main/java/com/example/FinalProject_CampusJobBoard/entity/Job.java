@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "job")
+@Table(name = "jobs")
 public class Job {
 
     @Id
@@ -16,7 +16,7 @@ public class Job {
     private Long job_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employer_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User employer;
 
     @Column(nullable = false, length = 100)
