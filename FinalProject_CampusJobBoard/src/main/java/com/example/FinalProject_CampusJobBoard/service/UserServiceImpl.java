@@ -20,23 +20,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> findByName(String name) {
-        return repo.findByName(name);
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return repo.findByEmail(email);
-    }
-
-    @Override
-    public List<User> findByRole(UserRoles role) {
-        return repo.findByRole(role);
-    }
-
-    @Override
-    public List<User> findByStatus(UserStatus status) {
-        return repo.findByStatus(status);
+    public User findById(Long Id) {
+        return repo.findById(Id).orElse(null);
     }
 
     @Override
@@ -47,5 +32,21 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteById(Long Id) {
         repo.deleteById(Id);
+    }
+
+    public Optional<User> findByName(String name) {
+        return repo.findByName(name);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return repo.findByEmail(email);
+    }
+
+    public List<User> findByRole(UserRoles role) {
+        return repo.findByRole(role);
+    }
+
+    public List<User> findByStatus(UserStatus status) {
+        return repo.findByStatus(status);
     }
 }

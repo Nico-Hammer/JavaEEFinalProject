@@ -8,9 +8,6 @@ import java.util.List;
 
 public interface JobService {
     List<Job> findAll();
-    List<Job> findByStatus(JobStatus status);
-    List<Job> findByEmployer(User employer);
-    List<Job> findByCategory(String category);
     Job findById(Long Id);
     Job saveJob(Job job);
     void deleteById(Long Id);
