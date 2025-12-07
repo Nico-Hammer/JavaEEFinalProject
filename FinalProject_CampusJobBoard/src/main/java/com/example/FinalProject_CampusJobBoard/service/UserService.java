@@ -9,10 +9,6 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> findAll();
-    Optional<User> findByName(String name);
-    Optional<User> findByEmail(String email);
-    List<User> findByRole(UserRoles role);
-    List<User> findByStatus(UserStatus status);
     User save(User user);
     void deleteById(Long Id);
 }
