@@ -3,14 +3,12 @@ package com.example.FinalProject_CampusJobBoard.Security.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
-
     private static final String SECRET_KEY = "08e52089708c88110d8c7e22916410db7a7a00abbe8227dfc3c661397e0ebc5a71b993f674c181b13b8acac225e5a1ab000cfa4eb2fba2bc076c5f83a872f6f2";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
@@ -23,7 +21,6 @@ public class JwtUtil {
                 .map(Object::toString)
                 .collect(Collectors.toList()));
 
-        // create token
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
