@@ -1,8 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.service;
 
 import com.example.FinalProject_CampusJobBoard.entity.User;
-import com.example.FinalProject_CampusJobBoard.enums.UserRoles;
-import com.example.FinalProject_CampusJobBoard.enums.UserStatus;
 import com.example.FinalProject_CampusJobBoard.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +38,5 @@ public class UserServiceImpl implements UserService{
 
     public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
-    }
-
-    public List<User> findByRole(UserRoles role) {
-        return repo.findByRole(role);
-    }
-
-    public List<User> findByStatus(UserStatus status) {
-        return repo.findByStatus(status);
     }
 }
