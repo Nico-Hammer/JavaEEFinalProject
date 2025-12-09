@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface JobService {
     List<Job> findAll();
+
     Job findById(Long Id);
+
     Job saveJob(Job job);
+
     void deleteById(Long Id);
 }

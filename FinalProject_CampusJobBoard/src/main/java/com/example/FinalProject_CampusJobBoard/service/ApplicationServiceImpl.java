@@ -8,9 +8,12 @@ import com.example.FinalProject_CampusJobBoard.repository.JobApplicationReposito
 
 import java.util.List;
 
-public class ApplicationServiceImpl implements ApplicationService{
+public class ApplicationServiceImpl implements ApplicationService {
     private final JobApplicationRepository repo;
-    public ApplicationServiceImpl(JobApplicationRepository repo){this.repo = repo;}
+
+    public ApplicationServiceImpl(JobApplicationRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public List<JobApplication> findAll() {
@@ -32,19 +35,19 @@ public class ApplicationServiceImpl implements ApplicationService{
         repo.deleteById(Id);
     }
 
-    public List<JobApplication> findByStatus(JobApplicationStatus status){
+    public List<JobApplication> findByStatus(JobApplicationStatus status) {
         return repo.findByStatus(status);
     }
 
-    public List<JobApplication> findByJob(Job job){
+    public List<JobApplication> findByJob(Job job) {
         return repo.findByJob(job);
     }
 
-    public List<JobApplication> findByStudent(User student){
+    public List<JobApplication> findByStudent(User student) {
         return repo.findByStudent(student);
     }
 
-    boolean existsByJobAndStudent(Job job, User student){
-        return repo.existsByJobAndStudent(job,student);
+    boolean existsByJobAndStudent(Job job, User student) {
+        return repo.existsByJobAndStudent(job, student);
     }
 }
