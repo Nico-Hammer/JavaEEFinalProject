@@ -5,6 +5,7 @@ import com.example.FinalProject_CampusJobBoard.enums.UserStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -27,15 +28,34 @@ public class User {
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRoles role = UserRoles.STUDENT;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    private boolean enabled = true;
+
+    public User() {
+    }
+
+    public User(Long user_id, String fullName, String email, String password, UserStatus status, Set<Role> roles, LocalDateTime createdAt, LocalDateTime updatedAt, boolean enabled) {
+        this.user_id = user_id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.roles = roles;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.enabled = enabled;
+    }
 
     public Long getUser_id() {
         return user_id;
@@ -77,12 +97,12 @@ public class User {
         this.status = status;
     }
 
-    public UserRoles getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(UserRoles role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -99,5 +119,13 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
