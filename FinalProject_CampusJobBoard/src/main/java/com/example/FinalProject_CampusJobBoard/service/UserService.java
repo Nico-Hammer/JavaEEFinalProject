@@ -1,7 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.service;
 
 import com.example.FinalProject_CampusJobBoard.entity.User;
-
 import java.util.List;
 
 public interface UserService {

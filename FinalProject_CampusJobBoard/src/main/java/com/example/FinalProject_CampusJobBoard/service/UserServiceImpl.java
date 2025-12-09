@@ -3,7 +3,6 @@ package com.example.FinalProject_CampusJobBoard.service;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +37,9 @@ public class UserServiceImpl implements UserService{
 
     public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
+    }
+
+    public Optional<User> findByStatus(String status) {
+        return repo.findByStatus(status);
     }
 }
