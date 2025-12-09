@@ -42,8 +42,4 @@ public class UserServiceImpl implements UserService{
     public Optional<User> findByStatus(String status) {
         return repo.findByStatus(status);
     }
-
-    public Optional<User> findByRole(String role) {
-        return repo.findByRole(role);
-    }
 }
