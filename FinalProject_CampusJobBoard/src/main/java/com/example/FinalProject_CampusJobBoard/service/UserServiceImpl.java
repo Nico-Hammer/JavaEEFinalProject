@@ -39,11 +39,11 @@ public class UserServiceImpl implements UserService{
         return repo.findByEmail(email);
     }
 
-    public Optional<User> findByStatus(String status) {
+    public List<User> findByStatus(String status) {
         return repo.findByStatus(status);
     }
 
-    public Optional<User> findByRole(String role) {
+    public List<User> findByRole(String role) {
         return repo.findByRole(role);
     }
 }
