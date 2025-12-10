@@ -43,11 +43,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         return repo.findByJob(job);
     }
 
+    @Override
     public List<JobApplication> findByStudent(User student) {
         return repo.findByStudent(student);
     }
 
-    boolean existsByJobAndStudent(Job job, User student) {
+    @Override
+    public boolean existsByJobAndStudent(Job job, User student) {
         return repo.existsByJobAndStudent(job, student);
     }
 }
