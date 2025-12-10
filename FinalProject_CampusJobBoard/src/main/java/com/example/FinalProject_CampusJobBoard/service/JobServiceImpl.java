@@ -35,6 +35,7 @@ public class JobServiceImpl implements JobService{
         return repo.findByTitleContainingIgnoreCase(title);
     }
 
+    @Override
     public List<Job> findByStatus(JobStatus status){
         return repo.findByStatus(status);
     }
