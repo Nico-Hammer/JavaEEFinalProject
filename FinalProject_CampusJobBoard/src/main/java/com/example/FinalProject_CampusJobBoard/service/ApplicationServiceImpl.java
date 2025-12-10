@@ -4,6 +4,7 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobApplicationStatus;
+import com.example.FinalProject_CampusJobBoard.exception.DuplicateApplicationException;
 import com.example.FinalProject_CampusJobBoard.repository.JobApplicationRepository;
 
 import java.util.List;
@@ -43,11 +44,28 @@ public class ApplicationServiceImpl implements ApplicationService {
         return repo.findByJob(job);
     }
 
+    @Override
     public List<JobApplication> findByStudent(User student) {
         return repo.findByStudent(student);
     }
 
-    boolean existsByJobAndStudent(Job job, User student) {
+    @Override
+    public boolean existsByJobAndStudent(Job job, User student) {
         return repo.existsByJobAndStudent(job, student);
+    }
+
+    @Override
+    public JobApplication createApplication(Job job, User student) {
+        // Check for duplicates
+        if (existsByJobAndStudent(job, student)) {
+            throw new DuplicateApplicationException("You have already applied to this job");
+        }
+
+        // Create application
+        JobApplication application = new JobApplication();
+        application.setJob(job);
+        application.setStudent(student);
+
+        return save(application);
     }
 }
