@@ -52,4 +52,18 @@ public class AdminController {
         jobService.saveJob(foundJob);
         return "redirect:/admin/pending-jobs";
     }
+
+    // Accept job posting
+    @PostMapping("/pending-jobs/{id}/decline")
+    public String acceptJobPosting(@PathVariable Long id, @ModelAttribute("job") Job acceptedJob){
+        Job foundJob = jobService.findById(id);
+        if(foundJob == null){
+            throw new JobNotFoundException("Job with ID " + id + " not found");
+        }
+        if(acceptedJob.getStatus() != JobStatus.APPROVED) {
+            foundJob.setStatus(JobStatus.APPROVED);
+        }
+        jobService.saveJob(foundJob);
+        return "redirect:/admin/pending-jobs";
+    }
 }
