@@ -18,4 +18,6 @@ public interface ApplicationService {
     List<JobApplication> findByStudent(User student);
 
     boolean existsByJobAndStudent(Job job, User student);
+
+    JobApplication createApplication(Job job, User student);
 }
