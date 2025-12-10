@@ -14,4 +14,8 @@ public interface ApplicationService {
     JobApplication save(JobApplication jobApplication);
 
     void deleteById(Long Id);
+
+    List<JobApplication> findByStudent(User student);
+
+    boolean existsByJobAndStudent(Job job, User student);
 }
