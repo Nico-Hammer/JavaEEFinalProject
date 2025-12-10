@@ -14,4 +14,6 @@ public interface JobService {
     Job saveJob(Job job);
 
     void deleteById(Long Id);
+
+    List<Job> findByStatus(JobStatus status);
 }
