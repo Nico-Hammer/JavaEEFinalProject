@@ -2,13 +2,16 @@ package com.example.FinalProject_CampusJobBoard.controller;
 
 import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
+import com.example.FinalProject_CampusJobBoard.exception.DuplicateApplicationException;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -42,5 +45,20 @@ public class StudentController {
         }
         model.addAttribute("job", job);
         return "student/job-details";
+    }
+
+    @PostMapping("/jobs/{id}/apply")
+    public String applyToJob(@PathVariable Long id) {
+        User student = null // TODO: getCurrentUser method
+        Job job = jobService.findById(id);
+
+        if (job == null || job.getStatus() != JobStatus.APPROVED) {
+            throw new JobNotFoundException("Job not available");
+        }
+
+        applicationService.createApplication(job, student);
+
+        return "redirect:/student/jobs" + id;
+
     }
 }
