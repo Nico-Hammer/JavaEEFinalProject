@@ -3,7 +3,7 @@
 # Functional requirements
 ## Auth and security
 - [ ] User login and registration via Spring Security
-- [ ] Password encryption via BCrypt
+- [x] Password encryption via BCrypt
 - [ ] Role-based authorization
 - [ ] Session-based authentication (jwt?) + custom login page
 ## Jobs module
@@ -18,19 +18,19 @@
 ## Application module
 - [ ] Prevent duplicate applications using validation or a unique constraint in the database
 ## Validation
-- [ ] Use `@Valid` `@NotBlank` `@Email` `@Size` etc.
+- [x] Use `@Valid` `@NotBlank` `@Email` `@Size` etc.
 - [ ] Display errors on thymeleaf forms
 ## Exception handling
-- [ ] Global exception handler (@ControllerAdvice)
-- [ ] JobNotFoundException, UserNotFoundException, etc.
+- [x] Global exception handler (@ControllerAdvice)
+- [x] JobNotFoundException, UserNotFoundException, etc.
 - [ ] Return user-friendly error pages
 # Non-functional requirements
 - [ ] Password encryption and role-based access
-- [ ] Efficient CRUD operations
+- [x] Efficient CRUD operations
 - [ ] User-friendly UI
-- [ ] Layered architecture
+- [x] Layered architecture
 - [ ] "Clean" code style
-- [ ] Database supports multiple users and jobs
+- [x] Database supports multiple users and jobs
 # Roles
 ## Admin
 - [ ] Approve/reject job postings
