@@ -16,4 +16,6 @@ public interface JobService {
     void deleteById(Long Id);
 
     List<Job> findByStatus(JobStatus status);
+
+    List<Job> findByEmployer(User employer);
 }
