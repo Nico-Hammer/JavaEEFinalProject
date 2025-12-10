@@ -3,7 +3,6 @@ package com.example.FinalProject_CampusJobBoard.controller;
 import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
-import com.example.FinalProject_CampusJobBoard.exception.DuplicateApplicationException;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
@@ -23,13 +22,13 @@ public class StudentController {
     private final JobService jobService;
     private final ApplicationService applicationService;
 
-    public StudentController(JobService jobService, ApplicationService applicationService) {
+    public StudentController(JobService jobService, ApplicationService applicationService){
         this.jobService = jobService;
         this.applicationService = applicationService;
     }
 
     @GetMapping("/jobs")
-    public String listApprovedJobs(Model model) {
+    public String listApprovedJobs(Model model){
         List<Job> approvedJobs = jobService.findByStatus(JobStatus.APPROVED);
         model.addAttribute("jobs", approvedJobs);
         return "students/jobs";
@@ -45,12 +44,12 @@ public class StudentController {
             throw new JobNotFoundException("Job is not available");
         }
         model.addAttribute("job", job);
-        return "student/job-details";
+        return "student/job-deatails";
     }
 
     @PostMapping("/jobs/{id}/apply")
     public String applyToJob(@PathVariable Long id) {
-        User student = null // TODO: getCurrentUser method
+        User student = null; // TODO: getCurrentUser method
         Job job = jobService.findById(id);
 
         if (job == null || job.getStatus() != JobStatus.APPROVED) {
@@ -59,20 +58,20 @@ public class StudentController {
 
         applicationService.createApplication(job, student);
 
-        return "redirect:/student/jobs" + id;
+        return "redirect:/students/jobs" + id;
     }
 
     @GetMapping("/applications")
-    public String viewMyApplication(Model model) {
+    public String viewMyAppliation(Model model) {
 
-        User student = null // TODO: getCurrentUser method
+        User student = null; // TODO: getCurrentUser method
 
-        if (student == null) {
+        if (student == null){
             throw new RuntimeException("Student not authenticated");
         }
 
         List<JobApplication> applications = applicationService.findByStudent(student);
-        model.addAttribute("applications" applications);
+        model.addAttribute("applications", applications);
         return "student/my-applications";
     }
 }
