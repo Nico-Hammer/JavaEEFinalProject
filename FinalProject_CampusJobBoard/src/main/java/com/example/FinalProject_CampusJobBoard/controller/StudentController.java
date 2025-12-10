@@ -1,6 +1,7 @@
 package com.example.FinalProject_CampusJobBoard.controller;
 
 import com.example.FinalProject_CampusJobBoard.entity.Job;
+import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.DuplicateApplicationException;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
@@ -59,6 +60,19 @@ public class StudentController {
         applicationService.createApplication(job, student);
 
         return "redirect:/student/jobs" + id;
+    }
 
+    @GetMapping("/applications")
+    public String viewMyApplication(Model model) {
+
+        User student = null // TODO: getCurrentUser method
+
+        if (student == null) {
+            throw new RuntimeException("Student not authenticated");
+        }
+
+        List<JobApplication> applications = applicationService.findByStudent(student);
+        model.addAttribute("applications" applications);
+        return "student/my-applications";
     }
 }
