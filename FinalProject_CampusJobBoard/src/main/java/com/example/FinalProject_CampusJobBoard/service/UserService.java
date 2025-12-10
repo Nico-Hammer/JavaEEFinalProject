@@ -5,7 +5,10 @@ import java.util.List;
 
 public interface UserService {
     List<User> findAll();
+
     User findById(Long Id);
+
     User save(User user);
+
     void deleteById(Long Id);
 }
