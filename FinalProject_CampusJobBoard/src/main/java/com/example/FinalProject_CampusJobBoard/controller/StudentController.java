@@ -1,5 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.controller;
 
+import com.example.FinalProject_CampusJobBoard.Security.user.CustomUserDetailsService;
 import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
@@ -21,10 +22,12 @@ import java.util.List;
 public class StudentController {
     private final JobService jobService;
     private final ApplicationService applicationService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public StudentController(JobService jobService, ApplicationService applicationService){
+    public StudentController(JobService jobService, ApplicationService applicationService, CustomUserDetailsService customUserDetailsService){
         this.jobService = jobService;
         this.applicationService = applicationService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @GetMapping("/jobs")
@@ -44,12 +47,12 @@ public class StudentController {
             throw new JobNotFoundException("Job is not available");
         }
         model.addAttribute("job", job);
-        return "student/job-deatails";
+        return "student/job-details";
     }
 
     @PostMapping("/jobs/{id}/apply")
     public String applyToJob(@PathVariable Long id) {
-        User student = null; // TODO: getCurrentUser method
+        com.example.FinalProject_CampusJobBoard.entity.User student = customUserDetailsService.getCurrentUser();
         Job job = jobService.findById(id);
 
         if (job == null || job.getStatus() != JobStatus.APPROVED) {
@@ -62,9 +65,9 @@ public class StudentController {
     }
 
     @GetMapping("/applications")
-    public String viewMyAppliation(Model model) {
+    public String viewMyApplication(Model model) {
 
-        User student = null; // TODO: getCurrentUser method
+        com.example.FinalProject_CampusJobBoard.entity.User student = customUserDetailsService.getCurrentUser();
 
         if (student == null){
             throw new RuntimeException("Student not authenticated");
