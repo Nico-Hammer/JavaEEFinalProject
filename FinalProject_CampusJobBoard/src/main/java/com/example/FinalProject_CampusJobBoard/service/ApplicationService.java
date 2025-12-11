@@ -4,6 +4,7 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface ApplicationService {
@@ -20,4 +21,6 @@ public interface ApplicationService {
     boolean existsByJobAndStudent(Job job, User student);
 
     JobApplication createApplication(Job job, User student);
+
+    List<JobApplication> findByJob(Job job);
 }
