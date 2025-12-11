@@ -92,6 +92,15 @@ class JobRepositoryTest {
 
     @Test
     void findByEmployer() {
+        /* create the jobs list set up the mock repository and return results */
+        List<Job> jobs = Arrays.asList(job);
+        when(repo.findByEmployer(employer)).thenReturn(jobs);
+        /* get the job by employer and make sure its the expected result */
+        List<Job> foundJob = repo.findByEmployer(employer);
+        assertThat(foundJob).hasSize(1);
+        assertThat(foundJob.get(0).getEmployer()).isEqualTo(employer);
+        /* make sure the repository method was actually called */
+        verify(repo,times(1)).findByEmployer(employer);
     }
 
     @Test
