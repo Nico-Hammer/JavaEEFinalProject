@@ -3,6 +3,7 @@ package com.example.FinalProject_CampusJobBoard.service;
 import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.entity.User;
+import com.example.FinalProject_CampusJobBoard.enums.JobApplicationStatus;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface ApplicationService {
     boolean existsByJobAndStudent(Job job, User student);
 
     JobApplication createApplication(Job job, User student);
+
+    List<JobApplication> findByStatus(JobApplicationStatus status);
+
+    List<JobApplication> findByJob(Job job);
 }
