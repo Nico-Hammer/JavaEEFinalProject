@@ -5,6 +5,8 @@ import com.example.FinalProject_CampusJobBoard.entity.Role;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.repository.RoleRepository;
 import com.example.FinalProject_CampusJobBoard.repository.UserRepository;
+import com.example.FinalProject_CampusJobBoard.service.RoleService;
+import com.example.FinalProject_CampusJobBoard.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,14 +22,14 @@ import java.util.Map;
 public class AuthController {
 
     private final CustomUserDetailsService userDetailsService;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserService userService;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(CustomUserDetailsService userDetailsService, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(CustomUserDetailsService userDetailsService, UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.userService = userService;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
     @GetMapping("/")
@@ -53,7 +55,7 @@ public class AuthController {
             return "public/register";
         }
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
             bindingResult.rejectValue("email", "error.email", "Email already exists");
             return "public/register";
         }
@@ -66,17 +68,12 @@ public class AuthController {
             roleName = "STUDENT"; // STUDENT role default
         }
 
-        Role userRole = roleRepository.findByName(roleName)
-                .orElseGet(() -> {
-                    Role newRole = new Role();
-                    newRole.setName(roleName);
-                    return roleRepository.save(newRole);
-                });
+        Role userRole = roleService.getOrCreateRole(roleName);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(userRole));
 
-        userRepository.save(user);
+        userService.save(user);
         return "User registered successfully!";
     }
 
