@@ -4,7 +4,7 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
-import com.example.FinalProject_CampusJobBoard.service.JobServiceImpl;
+import com.example.FinalProject_CampusJobBoard.service.JobService;
 import com.example.FinalProject_CampusJobBoard.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final JobServiceImpl jobService;
+    private final JobService jobService;
     private final UserService userService;
 
-    public AdminController(JobServiceImpl jobService, UserService userService) {
+    public AdminController(JobService jobService, UserService userService) {
         this.jobService = jobService;
         this.userService = userService;
     }
