@@ -14,12 +14,10 @@ public class RoleServiceImpl {
         this.roleRepository = roleRepository;
     }
 
-    @Override
     public Optional<Role> findByName(String name){
         return roleRepository.findByName(name);
     }
 
-    @Override
     public Role getOrCreateRole(String roleName){
         return roleRepository.findByName(roleName)
                 .orElseGet(() -> {
