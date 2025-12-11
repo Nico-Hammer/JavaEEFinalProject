@@ -51,4 +51,8 @@ public class CustomUserDetails implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+    public User getUser() {
+        return user;
+    }
 }

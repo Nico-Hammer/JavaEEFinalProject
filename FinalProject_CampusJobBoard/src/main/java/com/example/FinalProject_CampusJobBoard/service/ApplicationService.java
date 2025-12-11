@@ -5,6 +5,7 @@ import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobApplicationStatus;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface ApplicationService {

@@ -1,7 +1,10 @@
 package com.example.FinalProject_CampusJobBoard.controller;
 
+import com.example.FinalProject_CampusJobBoard.Security.user.CustomUserDetails;
+import com.example.FinalProject_CampusJobBoard.Security.user.CustomUserDetailsService;
 import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
+import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
@@ -12,22 +15,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/employer")
 public class EmployerController {
     private final JobService jobService;
     private final ApplicationService applicationService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public EmployerController(JobService jobService, ApplicationService applicationService) {
+    public EmployerController(JobService jobService, ApplicationService applicationService, CustomUserDetailsService customUserDetailsService) {
         this.jobService = jobService;
         this.applicationService = applicationService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     // Display all jobs
     @GetMapping("/myjobs")
     public String listMyJobs(Model model) {
-        List<Job> jobs = jobService.findAll();
+        User employer = customUserDetailsService.getCurrentUser();
+        List<Job> jobs = jobService.findByEmployer(employer);
         model.addAttribute("jobs", jobs);
         return "employer/my-jobs";
     }
@@ -42,9 +49,8 @@ public class EmployerController {
     // Create new job
     @PostMapping("/jobs")
     public String createJob(@ModelAttribute("job") Job job) {
-        job.setStatus(JobStatus.PENDING);
-        job.setCreatedAt(LocalDateTime.now());
-        job.setUpdatedAt(LocalDateTime.now());
+        User employer = customUserDetailsService.getCurrentUser();
+        job.setEmployer(employer);
 
         jobService.saveJob(job);
         return "redirect:/employer/myjobs";
@@ -53,9 +59,15 @@ public class EmployerController {
     // Display edit for an existing job
     @GetMapping("/jobs/{id}/edit")
     public String showEditJobForm(@PathVariable Long id, Model model) {
+        User employer = customUserDetailsService.getCurrentUser();
         Job job = jobService.findById(id);
         if (job == null) {
             throw new JobNotFoundException("Job with ID " + id + " not found");
+        }
+
+        // Verify employer ownership
+        if (!job.getEmployer().getUser_id().equals(employer.getUser_id())){
+            throw new RuntimeException("You can only edit your own jobs");
         }
 
         model.addAttribute("job", job);
@@ -65,9 +77,15 @@ public class EmployerController {
     // Update existing job
     @PostMapping("/jobs/{id}/edit")
     public String updateJob(@PathVariable Long id, @ModelAttribute("job") Job updatedJob) {
+        User employer = customUserDetailsService.getCurrentUser();
         Job existingJob = jobService.findById(id);
         if (existingJob == null) {
             throw new JobNotFoundException("Job with ID " + id + " not found");
+        }
+
+        // Verify employer ownership
+        if (!existingJob.getEmployer().getUser_id().equals(employer.getUser_id())){
+            throw new RuntimeException("You can only edit your own jobs");
         }
 
         // Update job fields
@@ -91,9 +109,15 @@ public class EmployerController {
     // Delete existing job
     @PostMapping("/jobs/{id}/delete")
     public String deleteJob(@PathVariable Long id) {
+        User employer = customUserDetailsService.getCurrentUser();
         Job job = jobService.findById(id);
         if (job == null) {
             throw new JobNotFoundException("Job with ID " + id + " not found");
+        }
+
+        // Verify employer ownership
+        if (!job.getEmployer().getUser_id().equals(employer.getUser_id())){
+            throw new RuntimeException("You can only edit your own jobs");
         }
 
         jobService.deleteById(id);
@@ -103,7 +127,13 @@ public class EmployerController {
     // Display all applications
     @GetMapping("/applications")
     public String viewAllApplications(Model model) {
-        List<JobApplication> applications = applicationService.findAll();
+        User employer = customUserDetailsService.getCurrentUser();
+        List<Job> employerJobs = jobService.findByEmployer(employer);
+
+        List<JobApplication> applications = employerJobs.stream()
+                        .flatMap(job -> applicationService.findByJob(job).stream())
+                                .collect(Collectors.toList());
+
         model.addAttribute("applications", applications);
         return "employer/applicants";
     }
