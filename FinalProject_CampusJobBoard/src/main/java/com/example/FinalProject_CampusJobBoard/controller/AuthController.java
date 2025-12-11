@@ -47,7 +47,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute @Valid User user, BindingResult bindingResult) {
+    public String register(@ModelAttribute @Valid User user, BindingResult bindingResult,
+                           @RequestParam(required = false, defaultValue = "STUDENT") String roleType) {
         if (bindingResult.hasErrors()) {
             return "public/register";
         }
@@ -57,10 +58,18 @@ public class AuthController {
             return "public/register";
         }
 
+        final String roleName;
+        String upperRoleType = roleType.toUpperCase();
+        if (!upperRoleType.equals("STUDENT") && !upperRoleType.equals("EMPLOYER")) {
+            roleName = upperRoleType;
+        } else {
+            roleName = "STUDENT"; // STUDENT role default
+        }
+
         Role userRole = roleRepository.findByName("STUDENT")
                 .orElseGet(() -> {
                     Role newRole = new Role();
-                    newRole.setName("STUDENT");
+                    newRole.setName(roleName);
                     return roleRepository.save(newRole);
                 });
 
