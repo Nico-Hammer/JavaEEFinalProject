@@ -62,7 +62,7 @@ public class StudentController {
 
         applicationService.createApplication(job, student);
 
-        return "redirect:/student/jobs" + id;
+        return "redirect:/student/jobs";
     }
 
     @GetMapping("/applications")
