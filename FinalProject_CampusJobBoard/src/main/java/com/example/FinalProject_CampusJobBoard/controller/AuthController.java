@@ -60,13 +60,13 @@ public class AuthController {
 
         final String roleName;
         String upperRoleType = roleType.toUpperCase();
-        if (!upperRoleType.equals("STUDENT") && !upperRoleType.equals("EMPLOYER")) {
+        if (upperRoleType.equals("STUDENT") || upperRoleType.equals("EMPLOYER")) {
             roleName = upperRoleType;
         } else {
             roleName = "STUDENT"; // STUDENT role default
         }
 
-        Role userRole = roleRepository.findByName("STUDENT")
+        Role userRole = roleRepository.findByName(roleName)
                 .orElseGet(() -> {
                     Role newRole = new Role();
                     newRole.setName(roleName);
