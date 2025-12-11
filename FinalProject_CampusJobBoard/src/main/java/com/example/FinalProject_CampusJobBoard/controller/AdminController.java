@@ -4,6 +4,7 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
+import com.example.FinalProject_CampusJobBoard.exception.UserNotFoundException;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
 import com.example.FinalProject_CampusJobBoard.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -65,5 +66,29 @@ public class AdminController {
         }
         jobService.saveJob(foundJob);
         return "redirect:/admin/pending-jobs";
+    }
+
+    // Activate user
+    @PostMapping("/users/{id}/activate")
+    public String activateUser(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new UserNotFoundException("User with ID " + id + " not found");
+        }
+        user.setEnabled(true);
+        userService.save(user);
+        return "redirect:/admin/users";
+    }
+
+    // Deactivate user
+    @PostMapping("/users/{id}/deactivate")
+    public String deactivateUser(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new UserNotFoundException("User with ID " + id + " not found");
+        }
+        user.setEnabled(false);
+        userService.save(user);
+        return "redirect:/admin/users";
     }
 }

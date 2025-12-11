@@ -1,10 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Jobs - Campus Job Portal</title>
 </head>
 <body>
+<!-- Include header fragment -->
+<div th:replace="~{fragments/header :: header}"></div>
 
+<div class="container">
+    <div class="header-nav">
+        <h1>Pending Job Approvals</h1>
+        <div class="nav-links">
+            <a th:href="@{/admin/users}">Manage Users</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+    <div th:if="${pendingJobs == null or pendingJobs.isEmpty()}" class="no-jobs">
+        <h2>No pending jobs</h2>
+        <p>All job postings have been reviewed.</p>
+    </div>
+
+    <div th:if="${pendingJobs != null and !pendingJobs.isEmpty()}">
+        <div th:each="job : ${pendingJobs}" class="job-card">
+            <div class="job-header">
+                <div>
+                    <div class="job-title" th:text="${job.title}">Job Title</div>
+                    <div class="employer-info" th:if="${job.employer}">
+                        Posted by: <span th:text="${job.employer.fullName}"></span> (<span th:text="${job.employer.email}"></span>)
+                    </div>
+                    <div class="job-meta">
+                            <span th:if="${job.location}">
+                                Location: <span th:text="${job.location}"></span>
+                            </span>
+                        <span th:if="${job.salary}">
+                                Salary: <span th:text="${'$' + #numbers.formatDecimal(job.salary, 0, 'COMMA', 2, 'POINT')}"></span>
+                            </span>
+                        <span th:if="${job.category}">
+                                Category: <span th:text="${job.category}"></span>
+                            </span>
+                        <span th:if="${job.deadline}">
+                                Deadline: <span th:text="${#temporals.format(job.deadline, 'MMM dd, yyyy')}"></span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-description" th:text="${job.description}">Job description...</div>
+
+            <div class="job-actions">
+                <form th:action="@{/admin/pending-jobs/{id}/accept(id=${job.job_id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+                <form th:action="@{/admin/pending-jobs/{id}/decline(id=${job.job_id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this job posting?')">Reject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
