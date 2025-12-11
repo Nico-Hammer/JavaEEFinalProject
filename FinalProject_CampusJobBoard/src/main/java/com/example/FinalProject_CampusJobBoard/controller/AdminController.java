@@ -54,7 +54,7 @@ public class AdminController {
     }
 
     // Accept job posting
-    @PostMapping("/pending-jobs/{id}/decline")
+    @PostMapping("/pending-jobs/{id}/accept")
     public String acceptJobPosting(@PathVariable Long id, @ModelAttribute("job") Job acceptedJob){
         Job foundJob = jobService.findById(id);
         if(foundJob == null){

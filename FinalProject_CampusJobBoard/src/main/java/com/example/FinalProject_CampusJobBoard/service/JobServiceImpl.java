@@ -4,9 +4,11 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.repository.JobRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class JobServiceImpl implements JobService{
     private final JobRepository repo;
     public JobServiceImpl(JobRepository repo){this.repo = repo;}
