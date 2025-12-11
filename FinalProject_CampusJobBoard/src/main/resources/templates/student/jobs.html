@@ -1,10 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Jobs - Campus Job Portal</title>
 </head>
 <body>
+<!-- Include header fragment -->
+<div th:replace="~{fragments/header :: header}"></div>
 
+<div class="container">
+    <div class="header-nav">
+        <h1>Available Jobs</h1>
+        <div class="nav-links">
+            <a th:href="@{/student/applications}">My Applications</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+    <div th:if="${jobs == null or jobs.isEmpty()}" class="no-jobs">
+        <h2>No jobs available at the moment</h2>
+        <p>Check back later for new job postings!</p>
+    </div>
+
+    <div th:if="${jobs != null and !jobs.isEmpty()}">
+        <div th:each="job : ${jobs}" class="job-card">
+            <div class="job-title" th:text="${job.title}">Job Title</div>
+
+            <div class="job-meta">
+                    <span th:if="${job.location}">
+                        Location: <span th:text="${job.location}"></span>
+                    </span>
+                <span th:if="${job.salary}">
+                        Salary: <span th:text="${'$' + #numbers.formatDecimal(job.salary, 0, 'COMMA', 2, 'POINT')}"></span>
+                    </span>
+                <span th:if="${job.deadline}">
+                        Deadline: <span th:text="${#temporals.format(job.deadline, 'MMM dd, yyyy')}"></span>
+                    </span>
+                <span th:if="${job.category}">
+                        Category: <span th:text="${job.category}"></span>
+                    </span>
+            </div>
+
+            <div class="job-description" th:text="${job.description}">Job description...</div>
+
+            <a th:href="@{/student/jobs/{id}(id=${job.job_id})}" class="btn">View Details</a>
+        </div>
+    </div>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

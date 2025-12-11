@@ -8,6 +8,7 @@ import com.example.FinalProject_CampusJobBoard.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,12 +41,14 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String register(){
+    public String showRegisterForm(Model model) {
+        model.addAttribute("user", new User());
         return "public/register";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute @Valid User user, BindingResult bindingResult) {
+    public String register(@ModelAttribute @Valid User user, BindingResult bindingResult,
+                           @RequestParam(required = false, defaultValue = "STUDENT") String roleType) {
         if (bindingResult.hasErrors()) {
             return "public/register";
         }
@@ -55,8 +58,20 @@ public class AuthController {
             return "public/register";
         }
 
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Role not found — please insert roles first"));
+        final String roleName;
+        String upperRoleType = roleType.toUpperCase();
+        if (upperRoleType.equals("STUDENT") || upperRoleType.equals("EMPLOYER")) {
+            roleName = upperRoleType;
+        } else {
+            roleName = "STUDENT"; // STUDENT role default
+        }
+
+        Role userRole = roleRepository.findByName(roleName)
+                .orElseGet(() -> {
+                    Role newRole = new Role();
+                    newRole.setName(roleName);
+                    return roleRepository.save(newRole);
+                });
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(userRole));

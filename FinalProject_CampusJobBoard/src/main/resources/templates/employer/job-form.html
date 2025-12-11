@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${job.job_id != null ? 'Edit Job' : 'Create New Job'}">Create Job - Campus Job Portal</title>
 </head>
-<body>
+    <!-- Include header fragment -->
+<div th:replace="~{fragments/header :: header}"></div>
 
+<div class="container">
+    <div class="header-nav">
+        <h1 th:text="${job.job_id != null ? 'Edit Job' : 'Create New Job'}">Create New Job</h1>
+        <div class="nav-links">
+            <a th:href="@{/employer/myjobs}">Back to My Jobs</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+    <form th:object="${job}"
+          th:action="${job.job_id != null ? '/employer/jobs/' + job.job_id + '/edit' : '/employer/jobs'}"
+          method="post">
+
+        <div class="form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input type="text" id="title" th:field="*{title}" required maxlength="100"/>
+            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description <span class="required">*</span></label>
+            <textarea id="description" th:field="*{description}" required></textarea>
+            <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" th:field="*{location}" maxlength="100"/>
+            <div class="error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Location error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="number" id="salary" th:field="*{salary}" step="0.01" min="0"/>
+            <div class="error" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">Salary error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" id="category" th:field="*{category}" maxlength="50"/>
+            <div class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Category error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="deadline">Deadline</label>
+            <input type="date" id="deadline" th:field="*{deadline}"/>
+            <div class="error" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}">Deadline error</div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn" th:text="${job.job_id != null ? 'Update Job' : 'Create Job'}">Create Job</button>
+            <a th:href="@{/employer/myjobs}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

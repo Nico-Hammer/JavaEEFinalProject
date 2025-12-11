@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applications - Campus Job Portal</title>
 </head>
 <body>
+<!-- Include header fragment -->
+<div th:replace="~{fragments/header :: header}"></div>
 
+<div class="container">
+    <div class="header-nav">
+        <h1>Job Applications</h1>
+        <div class="nav-links">
+            <a th:href="@{/employer/myjobs}">My Jobs</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+    <div th:if="${applications == null or applications.isEmpty()}" class="no-applications">
+        <h2>No applications received yet</h2>
+        <p>Applications from students will appear here once they apply to your job postings.</p>
+    </div>
+
+    <div th:if="${applications != null and !applications.isEmpty()}">
+        <div th:each="app : ${applications}" class="application-card">
+            <div class="application-header">
+                <div>
+                    <div class="student-info" th:text="${app.student.fullName}">Student Name</div>
+                    <div class="application-meta">
+                        Email: <span th:text="${app.student.email}"></span>
+                    </div>
+                    <div class="job-title" th:text="${app.job.title}">Job Title</div>
+                    <div class="application-meta">
+                        Applied on: <span th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy HH:mm')}"></span>
+                    </div>
+                </div>
+                <span class="status" th:classappend="'status-' + ${app.status}" th:text="${app.status}">SUBMITTED</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
