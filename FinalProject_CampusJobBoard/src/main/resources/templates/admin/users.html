@@ -29,6 +29,7 @@
             <th>Roles</th>
             <th>Status</th>
             <th>Created At</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +50,24 @@
                 <span th:unless="${user.enabled}" class="status-disabled">Disabled</span>
             </td>
             <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2025-12-11 10:00</td>
+            <td>
+                <form th:if="${user.enabled}"
+                      th:action="@{/admin/users/{id}/deactivate(id=${user.user_id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit" class="action-button deactivate-button">
+                        Deactivate
+                    </button>
+                </form>
+                <form th:unless="${user.enabled}"
+                      th:action="@{/admin/users/{id}/activate(id=${user.user_id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit" class="action-button activate-button">
+                        Activate
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
