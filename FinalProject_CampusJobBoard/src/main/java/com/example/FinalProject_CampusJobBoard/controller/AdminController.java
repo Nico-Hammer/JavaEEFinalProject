@@ -79,4 +79,16 @@ public class AdminController {
         userService.save(user);
         return "redirect:/admin/users";
     }
+
+    // Deactivate user
+    @PostMapping("/users/{id}/deactivate")
+    public String deactivateUser(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new UserNotFoundException("User with ID " + id + " not found");
+        }
+        user.setEnabled(false);
+        userService.save(user);
+        return "redirect:/admin/users";
+    }
 }
