@@ -91,6 +91,15 @@ class JobApplicationRepositoryTest {
 
     @Test
     void testFindByStudent() {
+        /* create the jobapplication list and setup mock repo and return result */
+        List<JobApplication> applications = Arrays.asList(application);
+        when(repo.findByStudent(student)).thenReturn(applications);
+        /* get the job application by job and make sure that it has the expected student */
+        List<JobApplication> foundApplications = repo.findByStudent(student);
+        assertThat(foundApplications).hasSize(1);
+        assertThat(foundApplications.getFirst().getStudent()).isEqualTo(student);
+        /* make sure that the repository function is actually called */
+        verify(repo,times(1)).findByStudent(student);
     }
 
     @Test
