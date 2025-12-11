@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users - Campus Job Portal</title>
 </head>
 <body>
+<div class="container">
+    <div class="header-nav">
+        <h1>All Users</h1>
+        <div class="nav-links">
+            <a th:href="@{/admin/pending-jobs}">Pending Jobs</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
 
+    <div th:if="${users == null or users.isEmpty()}" class="empty-message">
+        <p>No users found.</p>
+    </div>
+
+    <table th:if="${users != null and !users.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.user_id}">1</td>
+            <td th:text="${user.fullName}">John Doe</td>
+            <td th:text="${user.email}">john@example.com</td>
+            <td>
+                        <span th:each="role : ${user.roles}"
+                              class="role-badge"
+                              th:text="${role.name}">STUDENT</span>
+                <span th:if="${user.roles == null or user.roles.isEmpty()}"
+                      class="role-badge"
+                      style="background-color: #ffcccc;">No Role</span>
+            </td>
+            <td>
+                <span th:if="${user.enabled}" class="status-enabled">Enabled</span>
+                <span th:unless="${user.enabled}" class="status-disabled">Disabled</span>
+            </td>
+            <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2025-12-11 10:00</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
