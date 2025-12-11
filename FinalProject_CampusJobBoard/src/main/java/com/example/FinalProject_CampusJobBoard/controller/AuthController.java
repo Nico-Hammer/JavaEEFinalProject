@@ -58,11 +58,11 @@ public class AuthController {
         }
 
         Role userRole = roleRepository.findByName("STUDENT")
-                        .orElseGet(()-> {
-                            Role newRole = new Role();
-                            newRole.setName("STUDENT");
-                            return roleRepository.save(newRole);
-                        });
+                .orElseGet(() -> {
+                    Role newRole = new Role();
+                    newRole.setName("STUDENT");
+                    return roleRepository.save(newRole);
+                });
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(userRole));

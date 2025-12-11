@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Campus Job Portal</title>
 </head>
+
 <body>
-<h1>Login</h1>
+    <h1>Login</h1>
 
-<form th:action="@{/jobBoard/login}" method="post">
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-    </div>
-    <button type="submit">Login</button>
-</form>
+    <form th:action="@{/jobBoard/login}" method="post">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="username" required />
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Login</button>
+    </form>
 
-<p>
-    Don't have an account? <a th:href="@{/jobBoard/register}">Register here</a>
-</p>
+    <p>
+        Don't have an account? <a th:href="@{/jobBoard/register}">Register here</a>
+    </p>
 </body>
+
 </html>
