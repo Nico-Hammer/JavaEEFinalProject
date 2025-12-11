@@ -104,5 +104,12 @@ class JobApplicationRepositoryTest {
 
     @Test
     void testExistsByJobAndStudent() {
+        /* set up the mock repository and return result */
+        when(repo.existsByJobAndStudent(job,student)).thenReturn(true);
+        /* check if the function returns the expected result */
+        boolean exists = repo.existsByJobAndStudent(job,student);
+        assertThat(exists).isTrue();
+        /* make sure that the repository method is actually called */
+        verify(repo,times(1)).existsByJobAndStudent(job,student);
     }
 }
