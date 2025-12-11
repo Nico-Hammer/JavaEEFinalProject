@@ -1,6 +1,8 @@
 package com.example.FinalProject_CampusJobBoard.repository;
 
 import com.example.FinalProject_CampusJobBoard.entity.Role;
+import org.aspectj.lang.annotation.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,9 +40,18 @@ class RoleRepositoryTest {
         adminRole.setName("ADMIN");
     }
 
+    @AfterEach
+    void teardown(){
+        userRole = null;
+        studentRole = null;
+        employerRole = null;
+        adminRole = null;
+        repo.deleteAll();
+    }
+
     @Test
     void testFindByName() {
-        /* mock the repository method and return result */
+        /* mock the repository method and return results */
         when(repo.findByName("USER")).thenReturn(Optional.of(userRole));
         when(repo.findByName("STUDENT")).thenReturn(Optional.of(studentRole));
         when(repo.findByName("EMPLOYER")).thenReturn(Optional.of(employerRole));
