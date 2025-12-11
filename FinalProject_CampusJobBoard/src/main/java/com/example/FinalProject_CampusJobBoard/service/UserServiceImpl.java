@@ -45,4 +45,9 @@ public class UserServiceImpl implements UserService{
     public List<User> findByRoles_Name(String roleName) {
         return repo.findByRoles_Name(roleName);
     }
+
+    @Override
+    public boolean emailExists(String email) {
+        return repo.findByEmail(email).isPresent();
+    }
 }
