@@ -5,6 +5,7 @@ import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
+import com.example.FinalProject_CampusJobBoard.exception.UnauthorizedUserException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
 import org.springframework.security.core.userdetails.User;
@@ -70,7 +71,7 @@ public class StudentController {
         com.example.FinalProject_CampusJobBoard.entity.User student = customUserDetailsService.getCurrentUser();
 
         if (student == null){
-            throw new RuntimeException("Student not authenticated");
+            throw new UnauthorizedUserException("Student not authenticated");
         }
 
         List<JobApplication> applications = applicationService.findByStudent(student);

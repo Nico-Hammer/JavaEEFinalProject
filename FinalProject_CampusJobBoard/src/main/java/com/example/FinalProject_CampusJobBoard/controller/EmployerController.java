@@ -7,6 +7,7 @@ import com.example.FinalProject_CampusJobBoard.entity.JobApplication;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
+import com.example.FinalProject_CampusJobBoard.exception.UnauthorizedUserException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
 import org.springframework.stereotype.Controller;
@@ -67,7 +68,7 @@ public class EmployerController {
 
         // Verify employer ownership
         if (!job.getEmployer().getUser_id().equals(employer.getUser_id())){
-            throw new RuntimeException("You can only edit your own jobs");
+            throw new UnauthorizedUserException("You can only edit your own jobs");
         }
 
         model.addAttribute("job", job);
@@ -85,7 +86,7 @@ public class EmployerController {
 
         // Verify employer ownership
         if (!existingJob.getEmployer().getUser_id().equals(employer.getUser_id())){
-            throw new RuntimeException("You can only edit your own jobs");
+            throw new UnauthorizedUserException("You can only edit your own jobs");
         }
 
         // Update job fields
@@ -117,7 +118,7 @@ public class EmployerController {
 
         // Verify employer ownership
         if (!job.getEmployer().getUser_id().equals(employer.getUser_id())){
-            throw new RuntimeException("You can only edit your own jobs");
+            throw new UnauthorizedUserException("You can only edit your own jobs");
         }
 
         jobService.deleteById(id);
