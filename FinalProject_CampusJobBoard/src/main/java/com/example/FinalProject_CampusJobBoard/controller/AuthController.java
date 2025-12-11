@@ -57,8 +57,12 @@ public class AuthController {
             return "public/register";
         }
 
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Role not found — please insert roles first"));
+        Role userRole = roleRepository.findByName("STUDENT")
+                        .orElseGet(()-> {
+                            Role newRole = new Role();
+                            newRole.setName("STUDENT");
+                            return roleRepository.save(newRole);
+                        });
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(userRole));
