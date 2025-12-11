@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long job_id;
+    private Long jobApplication_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", nullable = false)
@@ -25,12 +25,12 @@ public class JobApplication {
 
     private LocalDateTime appliedAt = LocalDateTime.now();
 
-    public Long getJob_id() {
-        return job_id;
+    public Long getJobApplication_id() {
+        return jobApplication_id;
     }
 
-    public void setJob_id(Long job_id) {
-        this.job_id = job_id;
+    public void setJobApplication_id(Long jobApplication_id) {
+        this.jobApplication_id = jobApplication_id;
     }
 
     public Job getJob() {

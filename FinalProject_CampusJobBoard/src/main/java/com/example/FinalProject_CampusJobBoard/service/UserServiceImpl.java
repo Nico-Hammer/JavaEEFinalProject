@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> findByName(String name) {
-        return repo.findByName(name);
+    public Optional<User> findByFullName(String fullname) {
+        return repo.findByFullName(fullname);
     }
 
     @Override
@@ -42,12 +42,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findByStatus(String status) {
-        return repo.findByStatus(status);
-    }
-
-    @Override
-    public List<User> findByRole(String role) {
-        return repo.findByRole(role);
+    public List<User> findByRoles_Name(String roleName) {
+        return repo.findByRoles_Name(roleName);
     }
 }
