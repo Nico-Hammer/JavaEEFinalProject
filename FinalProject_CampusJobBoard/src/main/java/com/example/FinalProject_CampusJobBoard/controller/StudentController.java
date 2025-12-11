@@ -8,7 +8,6 @@ import com.example.FinalProject_CampusJobBoard.exception.JobNotFoundException;
 import com.example.FinalProject_CampusJobBoard.exception.UnauthorizedUserException;
 import com.example.FinalProject_CampusJobBoard.service.ApplicationService;
 import com.example.FinalProject_CampusJobBoard.service.JobService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,21 +24,22 @@ public class StudentController {
     private final ApplicationService applicationService;
     private final CustomUserDetailsService customUserDetailsService;
 
-    public StudentController(JobService jobService, ApplicationService applicationService, CustomUserDetailsService customUserDetailsService){
+    public StudentController(JobService jobService, ApplicationService applicationService,
+            CustomUserDetailsService customUserDetailsService) {
         this.jobService = jobService;
         this.applicationService = applicationService;
         this.customUserDetailsService = customUserDetailsService;
     }
 
     @GetMapping("/jobs")
-    public String listApprovedJobs(Model model){
+    public String listApprovedJobs(Model model) {
         List<Job> approvedJobs = jobService.findByStatus(JobStatus.APPROVED);
         model.addAttribute("jobs", approvedJobs);
-        return "students/jobs";
+        return "student/jobs";
     }
 
     @GetMapping("/jobs/{id}")
-    public String viewJobDetails(@PathVariable Long id, Model model){
+    public String viewJobDetails(@PathVariable Long id, Model model) {
         Job job = jobService.findById(id);
         if (job == null) {
             throw new JobNotFoundException("Job with ID " + id + " not found");
@@ -62,7 +62,7 @@ public class StudentController {
 
         applicationService.createApplication(job, student);
 
-        return "redirect:/students/jobs" + id;
+        return "redirect:/student/jobs" + id;
     }
 
     @GetMapping("/applications")
@@ -70,7 +70,7 @@ public class StudentController {
 
         com.example.FinalProject_CampusJobBoard.entity.User student = customUserDetailsService.getCurrentUser();
 
-        if (student == null){
+        if (student == null) {
             throw new UnauthorizedUserException("Student not authenticated");
         }
 
