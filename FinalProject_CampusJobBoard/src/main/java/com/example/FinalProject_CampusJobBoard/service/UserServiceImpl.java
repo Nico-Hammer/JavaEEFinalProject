@@ -31,18 +31,22 @@ public class UserServiceImpl implements UserService{
         repo.deleteById(Id);
     }
 
+    @Override
     public Optional<User> findByName(String name) {
         return repo.findByName(name);
     }
 
+    @Override
     public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
     }
 
+    @Override
     public List<User> findByStatus(String status) {
         return repo.findByStatus(status);
     }
 
+    @Override
     public List<User> findByRole(String role) {
         return repo.findByRole(role);
     }
