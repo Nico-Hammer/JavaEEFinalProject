@@ -29,6 +29,15 @@ public class AuthController {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    @GetMapping("/")
+    public String home() {
+        return "public/home";
+    }
+
+    @GetMapping("/home")
+    public String homePage() {
+        return "public/home";
+    }
 
     @GetMapping("/register")
     public String register(){
