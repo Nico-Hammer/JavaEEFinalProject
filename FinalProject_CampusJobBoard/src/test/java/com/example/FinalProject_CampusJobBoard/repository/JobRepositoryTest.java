@@ -79,6 +79,15 @@ class JobRepositoryTest {
 
     @Test
     void findByStatus() {
+        /* create the jobs list set up the mock repository and return results */
+        List<Job> jobs = Arrays.asList(job);
+        when(repo.findByStatus(JobStatus.PENDING)).thenReturn(jobs);
+        /* get the job by status and make sure its the expected result */
+        List<Job> foundJob = repo.findByStatus(JobStatus.PENDING);
+        assertThat(foundJob).hasSize(1);
+        assertThat(foundJob.get(0).getStatus()).isEqualTo(status);
+        /* make sure the repository method was actually called */
+        verify(repo,times(1)).findByStatus(JobStatus.PENDING);
     }
 
     @Test
