@@ -105,5 +105,14 @@ class JobRepositoryTest {
 
     @Test
     void findByCategory() {
+        /* create the jobs list set up the mock repository and return results */
+        List<Job> jobs = Arrays.asList(job);
+        when(repo.findByCategory("test category")).thenReturn(jobs);
+        /* get the job by category and make sure its the expected result */
+        List<Job> foundJob = repo.findByCategory("test category");
+        assertThat(foundJob).hasSize(1);
+        assertThat(foundJob.get(0).getCategory()).isEqualTo("test category");
+        /* make sure the repository method was actually called */
+        verify(repo,times(1)).findByCategory("test category");
     }
 }
