@@ -10,10 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -37,6 +35,11 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("/register")
+    public String register(){
+        return "public/register";
+    }
+
     @PostMapping("/register")
     public String register(@RequestBody User user) {
         Role userRole = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Role not found — please insert roles first"));
@@ -46,6 +49,11 @@ public class AuthController {
 
         userRepository.save(user);
         return "User registered successfully!";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "public/login";
     }
 
     @PostMapping("/login")
