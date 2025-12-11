@@ -1,5 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.repository;
 
+import com.example.FinalProject_CampusJobBoard.entity.Job;
 import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobStatus;
 import org.junit.jupiter.api.AfterEach;
@@ -9,7 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 class JobRepositoryTest {
@@ -19,6 +25,7 @@ class JobRepositoryTest {
     @Mock
     private UserRepository userRepo;
 
+    Job job;
     User employer;
     JobStatus status;
 
@@ -31,6 +38,12 @@ class JobRepositoryTest {
         employer.setEmail("e@mail.com");
         employer.setPassword("somePass");
         status = JobStatus.PENDING;
+        job = new Job();
+        job.setJob_id(1l);
+        job.setStatus(status);
+        job.setCategory("test category");
+        job.setEmployer(employer);
+        job.setTitle("title");
     }
 
     @AfterEach
@@ -38,12 +51,30 @@ class JobRepositoryTest {
         repo.deleteAll();
         userRepo.deleteAll();
 
+        job = null;
         employer = null;
         status = null;
     }
 
     @Test
     void findByTitleContainingIgnoreCase() {
+        /* create the jobs list set up the mock repository and return results */
+        List<Job> jobs = Arrays.asList(job);
+        when(repo.findByTitleContainingIgnoreCase("title")).thenReturn(jobs);
+        when(repo.findByTitleContainingIgnoreCase("Title")).thenReturn(jobs);
+        when(repo.findByTitleContainingIgnoreCase("TITLE")).thenReturn(jobs);
+        /* get the job by title ignoring case and make sure its the expected result */
+        List<Job> foundJob = repo.findByTitleContainingIgnoreCase("title");
+        List<Job> foundJobCapital = repo.findByTitleContainingIgnoreCase(("Title"));
+        List<Job> foundJobTitleCase = repo.findByTitleContainingIgnoreCase("TITLE");
+        assertThat(foundJob).hasSize(1);
+        assertThat(foundJob.get(0).getTitle()).isEqualTo(job.getTitle());
+        assertThat(foundJobCapital).hasSize(1);
+        assertThat(foundJobCapital.get(0).getTitle()).isEqualTo(job.getTitle());
+        assertThat(foundJobTitleCase).hasSize(1);
+        assertThat(foundJobTitleCase.get(0).getTitle()).isEqualTo(job.getTitle());
+        /* make sure that the repository method was actually called */
+        verify(repo,times(1)).findByTitleContainingIgnoreCase("Title");
     }
 
     @Test
