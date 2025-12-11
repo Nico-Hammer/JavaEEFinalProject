@@ -6,9 +6,11 @@ import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.enums.JobApplicationStatus;
 import com.example.FinalProject_CampusJobBoard.exception.DuplicateApplicationException;
 import com.example.FinalProject_CampusJobBoard.repository.JobApplicationRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ApplicationServiceImpl implements ApplicationService {
     private final JobApplicationRepository repo;
 

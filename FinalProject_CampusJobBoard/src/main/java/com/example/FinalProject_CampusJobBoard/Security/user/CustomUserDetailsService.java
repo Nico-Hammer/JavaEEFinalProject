@@ -1,6 +1,7 @@
 package com.example.FinalProject_CampusJobBoard.Security.user;
 
 import com.example.FinalProject_CampusJobBoard.entity.User;
+import com.example.FinalProject_CampusJobBoard.exception.UnauthorizedUserException;
 import com.example.FinalProject_CampusJobBoard.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,14 +19,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByFullName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new CustomUserDetails(user);
     }
 
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
-            throw new RuntimeException("User not authenticated");
+            throw new UnauthorizedUserException("User not authenticated");
         }
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails.getUser();

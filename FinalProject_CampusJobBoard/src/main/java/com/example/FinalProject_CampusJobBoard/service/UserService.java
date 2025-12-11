@@ -13,11 +13,9 @@ public interface UserService {
 
     void deleteById(Long Id);
 
-    Optional<User> findByName(String name);
+    Optional<User> findByFullName(String fullname);
 
     Optional<User> findByEmail(String email);
 
-    List<User> findByStatus(String status);
-
-    List<User> findByRole(String role);
+    List<User> findByRoles_Name(String roleName);
 }
