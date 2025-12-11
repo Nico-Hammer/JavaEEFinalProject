@@ -3,9 +3,10 @@
 # Functional requirements
 ## Auth and security
 - [ ] User login and registration via Spring Security
-- [ ] Password encryption via BCrypt
-- [ ] Role-based authorization
-- [ ] Session-based authentication (jwt?) + custom login page
+- [x] Password encryption via BCrypt
+- [x] Role-based authorization
+- [x] Session-based authentication (jwt?)
+- [ ] custom login page
 ## Jobs module
 - [ ] Employer creates jobs with:
     - [ ] Title
@@ -16,25 +17,25 @@
     - [ ] Deadline
 - [ ] Jobs remain pending until approved by an admin
 ## Application module
-- [ ] Prevent duplicate applications using validation or a unique constraint in the database
+- [x] Prevent duplicate applications using validation or a unique constraint in the database
 ## Validation
-- [ ] Use `@Valid` `@NotBlank` `@Email` `@Size` etc.
+- [x] Use `@Valid` `@NotBlank` `@Email` `@Size` etc.
 - [ ] Display errors on thymeleaf forms
 ## Exception handling
-- [ ] Global exception handler (@ControllerAdvice)
-- [ ] JobNotFoundException, UserNotFoundException, etc.
+- [x] Global exception handler (@ControllerAdvice)
+- [x] JobNotFoundException, UserNotFoundException, etc.
 - [ ] Return user-friendly error pages
 # Non-functional requirements
-- [ ] Password encryption and role-based access
-- [ ] Efficient CRUD operations
+- [x] Password encryption and role-based access
+- [x] Efficient CRUD operations
 - [ ] User-friendly UI
-- [ ] Layered architecture
-- [ ] "Clean" code style
-- [ ] Database supports multiple users and jobs
+- [x] Layered architecture
+- [x] "Clean" code style
+- [x] Database supports multiple users and jobs
 # Roles
 ## Admin
-- [ ] Approve/reject job postings
-- [ ] View all user accounts
+- [x] Approve/reject job postings
+- [x] View all user accounts
 - [ ] Activate/deactivate users
 ## Employer
 - [ ] Register + log in

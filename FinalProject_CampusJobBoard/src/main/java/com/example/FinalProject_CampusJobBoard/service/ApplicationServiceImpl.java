@@ -36,10 +36,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         repo.deleteById(Id);
     }
 
+    @Override
     public List<JobApplication> findByStatus(JobApplicationStatus status) {
         return repo.findByStatus(status);
     }
 
+    @Override
     public List<JobApplication> findByJob(Job job) {
         return repo.findByJob(job);
     }
