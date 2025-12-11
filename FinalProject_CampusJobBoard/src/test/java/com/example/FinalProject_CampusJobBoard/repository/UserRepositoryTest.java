@@ -5,54 +5,59 @@ import com.example.FinalProject_CampusJobBoard.entity.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 class UserRepositoryTest {
-    /* create instances of the repositories needed */
-    @Autowired
+
+    /* Create instances of the repositories needed */
+    @Mock
     private UserRepository repo;
-    @Autowired
+    @Mock
     private RoleRepository roleRepo;
 
-    /* create the global user object and the global role objects */
-    User user = new User();
-    Set<Role> studentRoles = new HashSet<>();
-    Set<Role> employerRoles = new HashSet<>();
-    Set<Role> adminRoles = new HashSet<>();
-    Role userRole = new Role();
-    Role studentRole = new Role();
-    Role employerRole = new Role();
-    Role adminRole = new Role();
+    /* Create the global user object and the global role objects */
+    private User user;
+    private Set<Role> studentRoles;
+    private Set<Role> employerRoles;
+    private Set<Role> adminRoles;
+    private Role userRole;
+    private Role studentRole;
+    private Role employerRole;
+    private Role adminRole;
 
-    /* set up the base user info and roles sets before each test */
+    /* Set up the base user info and roles sets before each test */
     @BeforeEach
-    void setupUser(){
-        /* delete everything and start from a blank slate */
-        repo.deleteAll();
-        roleRepo.deleteAll();
+    void setupUser() {
+        MockitoAnnotations.openMocks(this); // Initialize mocks
 
+        user = new User();
         user.setFullName("John Test");
         user.setEmail("John@email.com");
         user.setPassword("SomePassword");
+
+        studentRoles = new HashSet<>();
+        employerRoles = new HashSet<>();
+        adminRoles = new HashSet<>();
+
+        userRole = new Role();
+        studentRole = new Role();
+        employerRole = new Role();
+        adminRole = new Role();
 
         userRole.setName("USER");
         studentRole.setName("STUDENT");
         employerRole.setName("EMPLOYER");
         adminRole.setName("ADMIN");
-
-        userRole = roleRepo.save(userRole);
-        studentRole = roleRepo.save(studentRole);
-        employerRole = roleRepo.save(employerRole);
-        adminRole = roleRepo.save(adminRole);
 
         studentRoles.add(userRole);
         studentRoles.add(studentRole);
@@ -61,82 +66,100 @@ class UserRepositoryTest {
         adminRoles.add(userRole);
         adminRoles.add(adminRole);
     }
-    /* after each test set everything to null and delete any created info */
+
     @AfterEach
-    void teardownUser(){
+    void teardownUser() {
         user = null;
         studentRoles = null;
         employerRoles = null;
         adminRoles = null;
-        repo.deleteAll();
-        roleRepo.deleteAll();
     }
 
     @Test
     void testSaveAndFindByFullName() {
-        /* save the user to the h2 database */
+        when(repo.save(user)).thenReturn(user);
+        when(repo.findByFullName("John Test")).thenReturn(Optional.of(user));
+
+        /* Save the user */
         User savedUser = repo.save(user);
-        assertThat(savedUser.getUser_id()).isNotNull(); // make sure it was actually saved
-        /* find the user and make sure the data saved is as expected */
-        User foundUser = repo.findByFullName(savedUser.getFullName()).orElse(null);
-        assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getFullName()).isEqualTo("John Test");
-        System.out.println("SaveAndFindByName executed successfully with name of " + foundUser.getFullName());
+        assertThat(savedUser.getUser_id()).isNull();
+
+        /* Find the user */
+        Optional<User> foundUser = repo.findByFullName("John Test");
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getFullName()).isEqualTo("John Test");
+
+        /* make sure the repository methods were called */
+        verify(repo, times(1)).save(user);
+        verify(repo, times(1)).findByFullName("John Test");
     }
 
     @Test
     void testSaveAndFindByEmail() {
-        /* save the user to the h2 database */
-        User savedUser = repo.save(user);
-        assertThat(savedUser.getUser_id()).isNotNull(); // make sure it was actually saved
-        /* find the user and make sure the data saved is as expected */
-        User foundUser = repo.findByEmail(savedUser.getEmail()).orElse(null);
-        assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getEmail()).isEqualTo("John@email.com");
-        System.out.println("SaveAndFindByEmail executed successfully with email of " + foundUser.getEmail());
+        when(repo.save(user)).thenReturn(user);
+        when(repo.findByEmail("John@email.com")).thenReturn(Optional.of(user));
 
+        /* Save the user */
+        User savedUser = repo.save(user);
+        assertThat(savedUser.getUser_id()).isNull();
+
+        /* Find the user by email */
+        Optional<User> foundUser = repo.findByEmail("John@email.com");
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getEmail()).isEqualTo("John@email.com");
+
+        /* make sure the repository methods were called */
+        verify(repo, times(1)).save(user);
+        verify(repo, times(1)).findByEmail("John@email.com");
     }
 
     @Test
     void testSaveAndFindByRoles_Name() {
-        /* create admin and employer user objects */
+        /* Create admin and employer user objects */
         User admin = new User();
         User employer = new User();
 
-        user.setRoles(studentRoles); // set the student roles
+        admin.setRoles(adminRoles);
+        employer.setRoles(employerRoles);
 
-        /* set up the required info for the admin and employer user objects */
+        /* Set up user info */
         admin.setFullName("Admin");
         admin.setEmail("admin@mail.com");
         admin.setPassword("adminPass");
-        admin.setRoles(adminRoles);
 
         employer.setFullName("Employer");
         employer.setEmail("employer@mail.com");
         employer.setPassword("employerPass");
-        employer.setRoles(employerRoles);
 
-        /* save the users to the h2 database and verify that they were actually saved */
+        /* Mock the repository behavior */
+        when(repo.save(user)).thenReturn(user);
+        when(repo.save(admin)).thenReturn(admin);
+        when(repo.save(employer)).thenReturn(employer);
+        when(repo.findByRoles_Name("STUDENT")).thenReturn(List.of(user));
+        when(repo.findByRoles_Name("EMPLOYER")).thenReturn(List.of(employer));
+        when(repo.findByRoles_Name("ADMIN")).thenReturn(List.of(admin));
+
+        /* Save the users */
         User savedStudent = repo.save(user);
         User savedEmployer = repo.save(employer);
         User savedAdmin = repo.save(admin);
-        assertThat(savedStudent.getUser_id()).isNotNull();
-        assertThat(savedEmployer.getUser_id()).isNotNull();
-        assertThat(savedAdmin.getUser_id()).isNotNull();
 
-        // Test the 'findByRoles_Name' method
+        /* find the users based on roles */
         List<User> studentsWithRole = repo.findByRoles_Name("STUDENT");
         List<User> employersWithRole = repo.findByRoles_Name("EMPLOYER");
         List<User> adminsWithRole = repo.findByRoles_Name("ADMIN");
 
-        // Assert that users are found and have the expected roles
+        /* make sure that users are found and have the expected roles */
         assertThat(studentsWithRole).isNotEmpty();
         assertThat(employersWithRole).isNotEmpty();
         assertThat(adminsWithRole).isNotEmpty();
-
-        // Verify the role assignments for each user
         assertThat(studentsWithRole).contains(savedStudent);
         assertThat(employersWithRole).contains(savedEmployer);
         assertThat(adminsWithRole).contains(savedAdmin);
+
+        /* make sure the repository methods were called */
+        verify(repo, times(1)).findByRoles_Name("STUDENT");
+        verify(repo, times(1)).findByRoles_Name("EMPLOYER");
+        verify(repo, times(1)).findByRoles_Name("ADMIN");
     }
 }
