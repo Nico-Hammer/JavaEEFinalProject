@@ -27,7 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UnauthorizedUser.class)
+    @ExceptionHandler(UnauthorizedUserException.class)
     public ResponseEntity<ErrorDetails> unauthorizedUserExceptionHandler(Exception ex){
         ErrorDetails error = new ErrorDetails(0,ex.getMessage());
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);

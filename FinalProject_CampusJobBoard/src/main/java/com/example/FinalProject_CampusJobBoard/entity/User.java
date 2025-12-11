@@ -1,9 +1,6 @@
 package com.example.FinalProject_CampusJobBoard.entity;
 
-import com.example.FinalProject_CampusJobBoard.enums.UserRoles;
-import com.example.FinalProject_CampusJobBoard.enums.UserStatus;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -24,10 +21,6 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserStatus status = UserStatus.ACTIVE;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -45,12 +38,11 @@ public class User {
     public User() {
     }
 
-    public User(Long user_id, String fullName, String email, String password, UserStatus status, Set<Role> roles, LocalDateTime createdAt, LocalDateTime updatedAt, boolean enabled) {
+    public User(Long user_id, String fullName, String email, String password, Set<Role> roles, LocalDateTime createdAt, LocalDateTime updatedAt, boolean enabled) {
         this.user_id = user_id;
         this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.status = status;
         this.roles = roles;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -87,14 +79,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
     }
 
     public Set<Role> getRoles() {

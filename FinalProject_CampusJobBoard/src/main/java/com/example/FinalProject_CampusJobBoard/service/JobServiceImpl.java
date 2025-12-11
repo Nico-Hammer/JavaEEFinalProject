@@ -31,6 +31,7 @@ public class JobServiceImpl implements JobService{
         repo.deleteById(Id);
     }
 
+    @Override
     public List<Job> findByTitleContainingIgnoreCase(String title){
         return repo.findByTitleContainingIgnoreCase(title);
     }
@@ -40,10 +41,12 @@ public class JobServiceImpl implements JobService{
         return repo.findByStatus(status);
     }
 
+    @Override
     public List<Job> findByEmployer(User employer){
         return repo.findByEmployer(employer);
     }
 
+    @Override
     public List<Job> findByCategory(String category){
         return repo.findByCategory(category);
     }

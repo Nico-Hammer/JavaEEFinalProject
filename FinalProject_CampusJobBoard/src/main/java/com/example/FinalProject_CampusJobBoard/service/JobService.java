@@ -17,5 +17,9 @@ public interface JobService {
 
     List<Job> findByStatus(JobStatus status);
 
+    List<Job> findByTitleContainingIgnoreCase(String title);
+
     List<Job> findByEmployer(User employer);
+
+    List<Job> findByCategory(String category);
 }
