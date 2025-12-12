@@ -221,7 +221,23 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testUpdateJob_Success() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(1L)).thenReturn(employerJob);
+        when(jobService.saveJob(any(Job.class))).thenReturn(employerJob);
 
+        mockMvc.perform(post("/employer/jobs/1/edit")
+                        .with(csrf())
+                        .param("title", "Updated Title")
+                        .param("description", "Updated Description")
+                        .param("location", "New Location")
+                        .param("salary", "60000")
+                        .param("category", "New Category")
+                        .param("deadline", "2025-12-31"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/employer/myjobs"));
+
+        verify(jobService, times(1)).findById(1L);
+        verify(jobService, times(1)).saveJob(any(Job.class));
     }
 
     @Test
