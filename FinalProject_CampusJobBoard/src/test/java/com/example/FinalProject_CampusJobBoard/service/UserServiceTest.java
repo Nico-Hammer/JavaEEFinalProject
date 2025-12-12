@@ -122,6 +122,14 @@ class UserServiceTest {
 
     @Test
     void testFindByFullName() {
+        /* configure mockito behaviour */
+        when(repo.findByFullName("John Test")).thenReturn(Optional.of(user));
+        /* get the result and make sure its what was expected */
+        Optional<User> foundUser = repo.findByFullName("John Test");
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser).contains(user);
+        /* make sure that the repository function was actually called */
+        verify(repo,times(1)).findByFullName("John Test");
     }
 
     @Test
@@ -132,6 +140,7 @@ class UserServiceTest {
         Optional<User> foundUser = repo.findByEmail("alice@mail.com");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user2);
+        /* make sure that the repository function was actually called */
         verify(repo,times(1)).findByEmail("alice@mail.com");
     }
 
