@@ -147,7 +147,18 @@ public class AuthControllerTest {
 
     @Test
     void testRegisterWithDuplicateEmail() throws Exception{
+        when(userService.findByEmail("test@example.com")).thenReturn(Optional.of(testUser));
 
+        mockMvc.perform(post("/jobBoard/register")
+                        .param("fullName", "Test User")
+                        .param("email", "test@example.com")
+                        .param("password", "password123")
+                        .param("roleType", "STUDENT"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("public/register"));
+
+        verify(userService, times(1)).findByEmail("test@example.com");
+        verify(userService, never()).save(any(User.class));
     }
 
     @Test
