@@ -201,6 +201,22 @@ class ApplicationServiceTest {
 
     @Test
     void testCreateApplication() {
+        /* create new application and configure mockito behaviour */
+        JobApplication newApplication = new JobApplication();
+        newApplication.setStatus(jobApplicationStatus);
+        newApplication.setJobApplication_id(3l);
+        newApplication.setJob(job2);
+        newApplication.setStudent(student);
+        when(service.createApplication(newApplication.getJob(), newApplication.getStudent())).thenReturn(newApplication);
+        /* get the result and make sure that its what was expected */
+        JobApplication foundNew = service.createApplication(newApplication.getJob(), newApplication.getStudent());
+        assertThat(foundNew).isNotNull();
+        assertThat(foundNew.getJobApplication_id()).isEqualTo(3l);
+        assertThat(foundNew.getStudent()).isEqualTo(student);
+        assertThat(foundNew.getJob()).isEqualTo(job2);
+        assertThat(foundNew.getStatus()).isEqualTo(jobApplicationStatus);
+        /* make sure that the service method was actually called */
+        verify(service,times(1)).createApplication(newApplication.getJob(), newApplication.getStudent());
     }
 
     @Test
