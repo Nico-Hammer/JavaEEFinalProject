@@ -138,7 +138,15 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testListAllPendingJobs_EmptyList() throws Exception {
+        when(jobService.findByStatus(JobStatus.PENDING)).thenReturn(Collections.emptyList());
 
+        mockMvc.perform(get("/admin/pending-jobs"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/pending-jobs"))
+                .andExpect(model().attributeExists("pendingJobs"))
+                .andExpect(model().attribute("pendingJobs", Collections.emptyList()));
+
+        verify(jobService, times(1)).findByStatus(JobStatus.PENDING);
     }
 
     @Test
