@@ -126,7 +126,23 @@ public class AuthControllerTest {
 
     @Test
     void testRegistrationSuccess_Employer() throws Exception{
+        Role employerRole = new Role();
+        employerRole.setId(2L);
+        employerRole.setName("EMPLOYER");
 
+        when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(roleService.getOrCreateRole("EMPLOYER")).thenReturn(employerRole);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userService.save(any(User.class))).thenReturn(testUser);
+
+        mockMvc.perform(post("jobBoard/register")
+                        .param("fullName", "Employer User")
+                        .param("email", "employer@example.com")
+                        .param("password", "password123")
+                        .param("roleType", "EMPLOYER"))
+                .andExpect(status().isOk());
+
+        verify(roleService, times(1)).getOrCreateRole("EMPLOYER");
     }
 
     @Test
