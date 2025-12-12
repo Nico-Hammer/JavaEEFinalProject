@@ -278,7 +278,16 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testUpdateJob_Unauthorized() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(2L)).thenReturn(otherEmployerJob);
 
+        mockMvc.perform(post("/employer/jobs/2/edit")
+                        .with(csrf())
+                        .param("title", "Updated Title"))
+                .andExpect(status().isUnauthorized());
+
+        verify(jobService, times(1)).findById(2L);
+        verify(jobService, never()).saveJob(any());
     }
 
     @Test
