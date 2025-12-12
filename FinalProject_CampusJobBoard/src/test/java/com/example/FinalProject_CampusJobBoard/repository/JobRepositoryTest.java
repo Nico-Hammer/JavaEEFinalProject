@@ -57,7 +57,7 @@ class JobRepositoryTest {
     }
 
     @Test
-    void findByTitleContainingIgnoreCase() {
+    void testFindByTitleContainingIgnoreCase() {
         /* create the jobs list set up the mock repository and return results */
         List<Job> jobs = Arrays.asList(job);
         when(repo.findByTitleContainingIgnoreCase("title")).thenReturn(jobs);
@@ -78,7 +78,7 @@ class JobRepositoryTest {
     }
 
     @Test
-    void findByStatus() {
+    void testFindByStatus() {
         /* create the jobs list set up the mock repository and return results */
         List<Job> jobs = Arrays.asList(job);
         when(repo.findByStatus(JobStatus.PENDING)).thenReturn(jobs);
@@ -91,7 +91,7 @@ class JobRepositoryTest {
     }
 
     @Test
-    void findByEmployer() {
+    void testFindByEmployer() {
         /* create the jobs list set up the mock repository and return results */
         List<Job> jobs = Arrays.asList(job);
         when(repo.findByEmployer(employer)).thenReturn(jobs);
@@ -104,7 +104,7 @@ class JobRepositoryTest {
     }
 
     @Test
-    void findByCategory() {
+    void testFindByCategory() {
         /* create the jobs list set up the mock repository and return results */
         List<Job> jobs = Arrays.asList(job);
         when(repo.findByCategory("test category")).thenReturn(jobs);
