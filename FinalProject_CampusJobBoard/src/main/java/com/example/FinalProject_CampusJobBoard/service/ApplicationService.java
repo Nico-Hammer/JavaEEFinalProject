@@ -9,20 +9,12 @@ import java.util.List;
 
 public interface ApplicationService {
     List<JobApplication> findAll();
-
     JobApplication findById(Long Id);
-
     JobApplication save(JobApplication jobApplication);
-
     void deleteById(Long Id);
-
     List<JobApplication> findByStudent(User student);
-
     boolean existsByJobAndStudent(Job job, User student);
-
     JobApplication createApplication(Job job, User student);
-
     List<JobApplication> findByStatus(JobApplicationStatus status);
-
     List<JobApplication> findByJob(Job job);
 }
