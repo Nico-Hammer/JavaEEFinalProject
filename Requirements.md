@@ -1,5 +1,5 @@
 # General
-- [ ] Unit tests for service and controller layers via JUnit + Mockito
+- [x] Unit tests for service and controller layers via JUnit + Mockito
 # Functional requirements
 ## Auth and security
 - [x] User login and registration via Spring Security
