@@ -163,7 +163,12 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testViewJobDetails_NotApproved_Pending() throws Exception {
+        when(jobService.findById(2L)).thenReturn(pendingJob);
 
+        mockMvc.perform(get("/student/jobs/2"))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(2L);
     }
 
     @Test
