@@ -4,73 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Campus Job Portal</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .register-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .register-card h1 {
+            color: #1976D2;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1976D2;
+        }
+
+        .error-message {
+            color: #c62828;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: #1565C0;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #1976D2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .error-banner {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #c62828;
+        }
+    </style>
 </head>
 <body>
-<h1>Create Account</h1>
+<div class="container">
+    <div class="register-card">
+        <h1>Create Account</h1>
 
-<!-- Success message if redirected  -->
-<div th:if="${param.registered}" style="color: green;">
-    Registration successful! Please login.
-</div>
+        <!-- Success message if redirected -->
+        <div th:if="${param.registered}" class="success-message">
+            Registration successful! Please login.
+        </div>
 
-<!-- Error message if registration failed -->
-<div th:if="${param.error}" style="color: red;">
-    Registration failed. Please try again.
-</div>
+        <!-- Error message if registration failed -->
+        <div th:if="${param.error}" class="error-banner">
+            Registration failed. Please try again.
+        </div>
 
-<!-- Registration Form -->
-<form th:action="@{/jobBoard/register}" th:object="${user}" method="post">
+        <!-- Registration Form -->
+        <form th:action="@{/jobBoard/register}" th:object="${user}" method="post">
 
-    <!-- Full Name Field -->
-    <div>
-        <label for="fullName">Full Name:</label>
-        <input type="text" id="fullName" th:field="*{fullName}" required />
-        <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" style="color: red;"></span>
-    </div>
+            <!-- Full Name Field -->
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" th:field="*{fullName}" required />
+                <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="error-message"></span>
+            </div>
 
-    <!-- Email Field -->
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{email}" required />
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span>
-        <!-- Error for duplicate email -->
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span>
-    </div>
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" th:field="*{email}" required />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            </div>
 
-    <!-- Password Field -->
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" th:field="*{password}" required />
-        <!-- Error for invalid password -->
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span>
-    </div>
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:field="*{password}" required />
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></span>
+            </div>
 
-    <!-- Confirm Password Field -->
-    <div>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required />
-    </div>
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required />
+            </div>
 
-    <!-- Role Selection -->
-    <div>
-        <label>I am a:</label>
-        <div class="radio-group">
-            <label>
-                <input type="radio" name="roleType" value="STUDENT" checked />
-                Student
-            </label>
-            <label>
-                <input type="radio" name="roleType" value="EMPLOYER" />
-                Employer
-            </label>
+            <!-- Role Selection -->
+            <div class="form-group">
+                <label>I am a:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="roleType" value="STUDENT" checked />
+                        Student
+                    </label>
+                    <label>
+                        <input type="radio" name="roleType" value="EMPLOYER" />
+                        Employer
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Register</button>
+        </form>
+
+        <div class="login-link">
+            <p>Already have an account? <a th:href="@{/jobBoard/login}">Login here</a></p>
         </div>
     </div>
-
-    <button type="submit">Register</button>
-</form>
-
-<p>
-    Already have an account? <a th:href="@{/jobBoard/login}">Login here</a>
-</p>
+</div>
 </body>
 </html>
