@@ -152,7 +152,18 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testAcceptJobPosting_Success() throws Exception {
+        when(jobService.findById(1L)).thenReturn(pendingJob);
+        when(jobService.saveJob(any(Job.class))).thenReturn(pendingJob);
 
+        mockMvc.perform(post("/admin/pending-jobs/1/accept")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/pending-jobs"));
+
+        verify(jobService, times(1)).findById(1L);
+        verify(jobService, times(1)).saveJob(any(Job.class));
+        // Verify status changed to APPROVED
+        assert pendingJob.getStatus() == JobStatus.APPROVED;
     }
 
     @Test
