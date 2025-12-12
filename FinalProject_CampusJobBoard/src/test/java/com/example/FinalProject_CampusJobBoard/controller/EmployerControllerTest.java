@@ -263,7 +263,16 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testUpdateJob_NotFound() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(999L)).thenReturn(null);
 
+        mockMvc.perform(post("/employer/jobs/999/edit")
+                        .with(csrf())
+                        .param("title", "Updated Title"))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(999L);
+        verify(jobService, never()).saveJob(any());
     }
 
     @Test
