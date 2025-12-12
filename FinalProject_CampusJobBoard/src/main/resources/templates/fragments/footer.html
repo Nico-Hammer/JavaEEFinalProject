@@ -1,5 +1,22 @@
-<div th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml">
-    <footer style="background:#1976D2;color:white;padding:10px;">
-        Campus Job Portal 2025 - Chase Petrowsky, Nico Hammer
+<div th:fragment="footer" xmlns:th="http://www.thymeleaf.org">
+    <style>
+        footer {
+            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+    </style>
+
+    <footer>
+        <p>Campus Job Portal 2025 - Chase Petrowsky, Nico Hammer</p>
     </footer>
 </div>
