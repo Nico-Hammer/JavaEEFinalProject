@@ -122,6 +122,14 @@ class UserServiceTest {
 
     @Test
     void testSave() {
+        /* configure mockito behaviour */
+        when(repo.save(user)).thenReturn(user);
+        /* get the result and make sure its what was expected */
+        User savedUser = repo.save(user);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser).isEqualTo(user);
+        /* make sure that the repository function was actually called */
+        verify(repo,times(1)).save(user);
     }
 
     @Test
