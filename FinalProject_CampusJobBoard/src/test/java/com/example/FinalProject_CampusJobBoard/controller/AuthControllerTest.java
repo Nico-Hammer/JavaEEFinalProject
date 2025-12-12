@@ -75,7 +75,9 @@ public class AuthControllerTest {
 
     @Test
     void testShowHomePageAlt() throws Exception{
-
+        mockMvc.perform(get("/jobBoard/home"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("public/home"));
     }
 
     @Test
