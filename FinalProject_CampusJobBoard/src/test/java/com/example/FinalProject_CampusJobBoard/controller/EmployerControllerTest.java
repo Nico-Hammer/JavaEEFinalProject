@@ -103,6 +103,13 @@ class EmployerControllerTest {
         application.setJobApplication_id(1L);
         application.setJob(employerJob);
         application.setStatus(JobApplicationStatus.SUBMITTED);
+
+        // Setup test student
+        User testStudent = new User();
+        testStudent.setUser_id(10L);
+        testStudent.setFullName("Test Student");
+        testStudent.setEmail("student@example.com");
+        application.setStudent(testStudent);
     }
 
     @AfterEach
@@ -382,6 +389,13 @@ class EmployerControllerTest {
         JobApplication app2 = new JobApplication();
         app2.setJobApplication_id(2L);
         app2.setJob(job2);
+
+        User student2 = new User();
+        student2.setUser_id(11L);
+        student2.setFullName("Student 2");
+        student2.setEmail("student2@example.com");
+        app2.setStudent(student2);
+        app2.setStatus(JobApplicationStatus.SUBMITTED);
 
         List<Job> employerJobs = List.of(employerJob, job2);
         List<JobApplication> apps1 = Collections.singletonList(application);
