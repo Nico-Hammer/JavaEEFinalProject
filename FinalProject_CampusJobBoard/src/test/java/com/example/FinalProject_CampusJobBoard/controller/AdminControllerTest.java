@@ -94,7 +94,16 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testListAllUsers() throws Exception {
+        List<User> users = List.of(testUser, disabledUser);
+        when(userService.findAll()).thenReturn(users);
 
+        mockMvc.perform(get("/admin/users"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/users"))
+                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attribute("users", users));
+
+        verify(userService, times(1)).findAll();
     }
 
     @Test
