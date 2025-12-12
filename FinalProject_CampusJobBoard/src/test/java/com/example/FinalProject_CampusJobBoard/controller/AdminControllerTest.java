@@ -291,7 +291,18 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testDeactivateUser_AlreadyDisabled() throws Exception {
+        when(userService.findById(2L)).thenReturn(disabledUser);
+        when(userService.save(any(User.class))).thenReturn(disabledUser);
 
+        mockMvc.perform(post("/admin/users/2/deactivate")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/users"));
+
+        verify(userService, times(1)).findById(2L);
+        verify(userService, times(1)).save(any(User.class));
+        // User should remain disabled
+        assert !disabledUser.isEnabled();
     }
 
     @Test
