@@ -138,7 +138,15 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testViewJobDetails_Success() throws Exception {
+        when(jobService.findById(1L)).thenReturn(approvedJob);
 
+        mockMvc.perform(get("/student/jobs/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/job-details"))
+                .andExpect(model().attributeExists("job"))
+                .andExpect(model().attribute("job", approvedJob));
+
+        verify(jobService, times(1)).findById(1L);
     }
 
     @Test
