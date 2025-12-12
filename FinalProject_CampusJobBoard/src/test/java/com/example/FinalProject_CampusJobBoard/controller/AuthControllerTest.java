@@ -15,9 +15,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.Optional;
 
-import static org.mockito.Mockito.reset;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
@@ -94,12 +98,30 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("public/register"))
                 .andExpect(model().attributeExists("user"));
-
     }
 
     @Test
     void testRegistrationSuccess_Student() throws Exception{
+        // Set up the mocks
+        when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(roleService.getOrCreateRole("STUDENT")).thenReturn(studentRole);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userService.save(any(User.class))).thenReturn(testUser);
 
+        // Perform the registration
+        mockMvc.perform(post("jobBoard/register")
+                .param("fullName", "Test User")
+                .param("email", "test@example.com")
+                .param("password", "password123")
+                .param("roleType", "STUDENT"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("User registered successfully!"));
+
+        // Verify the interactions
+        verify(userService, times(1)).findByEmail("test@example.com");
+        verify(roleService, times(1)).getOrCreateRole("STUDENT");
+        verify(passwordEncoder, times(1)).encode("password123");
+        verify(userService, times(1)).save(any(User.class));
     }
 
     @Test
