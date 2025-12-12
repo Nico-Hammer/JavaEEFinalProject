@@ -133,6 +133,15 @@ class ApplicationServiceTest {
 
     @Test
     void testFindById() {
+        /* configure mockito behaviour */
+        when(service.findById(1l)).thenReturn(application);
+        /* get the result and make sure its what was expected */
+        JobApplication foundJobApplication = service.findById(1l);
+        assertThat(foundJobApplication).isNotNull();
+        assertThat(foundJobApplication).isEqualTo(application);
+        assertThat(foundJobApplication.getJobApplication_id()).isEqualTo(1l);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findById(1l);
     }
 
     @Test
