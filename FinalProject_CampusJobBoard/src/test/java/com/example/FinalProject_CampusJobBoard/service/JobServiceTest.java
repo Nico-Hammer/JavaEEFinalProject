@@ -112,6 +112,7 @@ class JobServiceTest {
         Job foundJob = service.findById(2l);
         assertThat(foundJob).isNotNull();
         assertThat(foundJob).isEqualTo(job2);
+        assertThat(foundJob.getJob_id()).isEqualTo(2l);
         /* make sure that the service function was actually called */
         verify(service,times(1)).findById(2l);
     }
@@ -150,9 +151,11 @@ class JobServiceTest {
         assertThat(foundApproved).isNotNull();
         assertThat(foundApproved).hasSize(1);
         assertThat(foundApproved).contains(job);
+        assertThat(foundApproved.get(0).getStatus()).isEqualTo(JobStatus.APPROVED);
         assertThat(foundRejected).isNotNull();
         assertThat(foundRejected).hasSize(1);
         assertThat(foundRejected).contains(job2);
+        assertThat(foundRejected.get(0).getStatus()).isEqualTo(JobStatus.REJECTED);
         /* make sure that the service function was actually called */
         verify(service,times(1)).findByStatus(status);
         verify(service,times(1)).findByStatus(status2);
@@ -185,5 +188,24 @@ class JobServiceTest {
 
     @Test
     void testFindByCategory() {
+        /* create the job lists and configure mockito behaviour */
+        List<Job> labourCat = List.of(job);
+        List<Job> marketingCat = List.of(job2);
+        when(service.findByCategory(job.getCategory())).thenReturn(labourCat);
+        when(service.findByCategory(job2.getCategory())).thenReturn(marketingCat);
+        /* get the result and make sure its what was expected */
+        List<Job> foundLabour = service.findByCategory(job.getCategory());
+        List<Job> foundMarketing = service.findByCategory(job2.getCategory());
+        assertThat(foundLabour).isNotNull();
+        assertThat(foundLabour).hasSize(1);
+        assertThat(foundLabour).contains(job);
+        assertThat(foundLabour.get(0).getCategory()).isEqualTo("Labour");
+        assertThat(foundMarketing).isNotNull();
+        assertThat(foundMarketing).hasSize(1);
+        assertThat(foundMarketing).contains(job2);
+        assertThat(foundMarketing.get(0).getCategory()).isEqualTo("Marketing");
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findByCategory(job.getCategory());
+        verify(service,times(1)).findByCategory(job2.getCategory());
     }
 }
