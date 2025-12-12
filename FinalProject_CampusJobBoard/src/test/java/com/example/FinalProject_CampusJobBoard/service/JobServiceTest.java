@@ -130,6 +130,11 @@ class JobServiceTest {
 
     @Test
     void testDeleteById() {
+        /* get the result and make sure its what was expected */
+        service.deleteById(1l);
+        assertThat(service.findById(1l)).isNull();
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).deleteById(1l);
     }
 
     @Test
