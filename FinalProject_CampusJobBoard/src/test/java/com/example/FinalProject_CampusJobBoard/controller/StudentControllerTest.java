@@ -216,7 +216,15 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testApplyToJob_NotApproved_Pending() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testStudent);
+        when(jobService.findById(2L)).thenReturn(pendingJob);
 
+        mockMvc.perform(post("/student/jobs/2/apply")
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(2L);
+        verify(applicationService, never()).createApplication(any(), any());
     }
 
     @Test
