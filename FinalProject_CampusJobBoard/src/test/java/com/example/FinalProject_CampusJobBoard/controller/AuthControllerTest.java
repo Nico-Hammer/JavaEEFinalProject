@@ -181,6 +181,14 @@ public class AuthControllerTest {
 
     @Test
     void testRegisterWithValidationErrors() throws Exception{
+        mockMvc.perform(post("/jobBoard/register")
+                        .param("fullName", "")  // Empty name should fail validation
+                        .param("email", "invalid-email")  // Invalid email
+                        .param("password", "123")  // Too short password
+                        .param("roleType", "STUDENT"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("public/register"));
 
+        verify(userService, never()).save(any(User.class));
     }
 }
