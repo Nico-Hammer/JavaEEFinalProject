@@ -197,7 +197,13 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testShowEditJobForm_NotFound() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(999L)).thenReturn(null);
 
+        mockMvc.perform(get("/employer/jobs/999/edit"))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(999L);
     }
 
     @Test
