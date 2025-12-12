@@ -310,7 +310,15 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testDeleteJob_NotFound() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(999L)).thenReturn(null);
 
+        mockMvc.perform(post("/employer/jobs/999/delete")
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(999L);
+        verify(jobService, never()).deleteById(any());
     }
 
     @Test
