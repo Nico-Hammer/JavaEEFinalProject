@@ -123,7 +123,16 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testListAllPendingJobs() throws Exception {
+        List<Job> pendingJobs = Collections.singletonList(pendingJob);
+        when(jobService.findByStatus(JobStatus.PENDING)).thenReturn(pendingJobs);
 
+        mockMvc.perform(get("/admin/pending-jobs"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/pending-jobs"))
+                .andExpect(model().attributeExists("pendingJobs"))
+                .andExpect(model().attribute("pendingJobs", pendingJobs));
+
+        verify(jobService, times(1)).findByStatus(JobStatus.PENDING);
     }
 
     @Test
