@@ -33,31 +33,52 @@ class UserServiceTest {
     private JobService jobService;
 
     private User user;
+    private User user2;
     private Role userRole;
     private Role studentRole;
-    private Set<Role> roles;
+    private Role employerRole;
+    private Set<Role> studentRoles;
+    private Set<Role> employerRoles;
 
     @BeforeEach
     void setUp() {
         userRole.setName("USER");
         studentRole.setName("STUDENT");
-        roles.add(userRole);
-        roles.add(studentRole);
+        employerRole.setName("EMPLOYER");
+        studentRoles.add(userRole);
+        studentRoles.add(studentRole);
+        employerRoles.add(userRole);
+        employerRoles.add(employerRole);
+
         user = new User();
         user.setUser_id(1L);
         user.setPassword("somePass");
         user.setEmail("John@mail.com");
         user.setFullName("John Test");
-        user.setRoles(roles);
+        user.setRoles(studentRoles);
+
+        user2 = new User();
+        user2.setUser_id(2L);
+        user2.setPassword("Somepass");
+        user2.setEmail("alice@mail.com");
+        user2.setFullName("Alice test");
+        user2.setRoles(employerRoles);
     }
 
     @AfterEach
     void tearDown() {
         repo.deleteAll();
+        jobRepo.deleteAll();
+
         user = null;
+        user2 = null;
+
         userRole = null;
         studentRole = null;
-        roles = null;
+        employerRole = null;
+
+        studentRoles = null;
+        employerRoles = null;
     }
 
     @Test
