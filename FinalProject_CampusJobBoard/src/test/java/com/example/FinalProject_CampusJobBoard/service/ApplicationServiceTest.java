@@ -179,6 +179,19 @@ class ApplicationServiceTest {
 
     @Test
     void testFindByStatus() {
+        /* create the job lists and configure mockito behaviour */
+        List<JobApplication> submittedJobs = List.of(application,application2);
+        when(service.findByStatus(jobApplicationStatus)).thenReturn(submittedJobs);
+        /* get the result and make sure its what was expected */
+        List<JobApplication> foundSubmitted = service.findByStatus(jobApplicationStatus);
+        assertThat(foundSubmitted).isNotNull();
+        assertThat(foundSubmitted).hasSize(2);
+        assertThat(foundSubmitted).contains(application);
+        assertThat(foundSubmitted).contains(application2);
+        assertThat(foundSubmitted.get(0).getStatus()).isEqualTo(JobApplicationStatus.SUBMITTED);
+        assertThat(foundSubmitted.get(1).getStatus()).isEqualTo(JobApplicationStatus.SUBMITTED);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findByStatus(jobApplicationStatus);
     }
 
     @Test
