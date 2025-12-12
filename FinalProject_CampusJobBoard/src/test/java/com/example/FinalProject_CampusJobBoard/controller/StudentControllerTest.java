@@ -124,7 +124,15 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testListApprovedJobs_EmptyList() throws Exception {
+        when(jobService.findByStatus(JobStatus.APPROVED)).thenReturn(Collections.emptyList());
 
+        mockMvc.perform(get("/student/jobs"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/jobs"))
+                .andExpect(model().attributeExists("jobs"))
+                .andExpect(model().attribute("jobs", Collections.emptyList()));
+
+        verify(jobService, times(1)).findByStatus(JobStatus.APPROVED);
     }
 
     @Test
