@@ -61,7 +61,7 @@ class RoleServiceTest {
         Optional<Role> foundAdmin = service.findByName("ADMIN");
         assertThat(foundAdmin).isPresent();
         assertThat(foundAdmin).contains(adminRole);
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(service,times(1)).findByName("STUDENT");
         verify(service,times(1)).findByName("ADMIN");
     }
@@ -75,7 +75,7 @@ class RoleServiceTest {
         Optional<Role> foundUser = Optional.ofNullable(service.getOrCreateRole("STUDENT"));
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(userRole);
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(service,times(1)).getOrCreateRole("STUDENT");
         /// testing the create role functionality
         /* create the new role and configure mockito behaviour */
@@ -87,7 +87,7 @@ class RoleServiceTest {
         Optional<Role> createdRole = Optional.ofNullable(service.getOrCreateRole(newRoleName));
         assertThat(createdRole).isPresent();
         assertThat(createdRole.get().getName()).isEqualTo(newRoleName);
-        /* make sure the repository function was actually called */
+        /* make sure the service function was actually called */
         verify(service,times(1)).getOrCreateRole(newRoleName);
     }
 }

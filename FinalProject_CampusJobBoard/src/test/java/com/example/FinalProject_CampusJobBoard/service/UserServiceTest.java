@@ -101,7 +101,7 @@ class UserServiceTest {
         assertThat(result).hasSize(2);
         assertThat(result).contains(user);
         assertThat(result).contains(user2);
-        /* make sure the repository method was actually called */
+        /* make sure the service method was actually called */
         verify(userService, times(1)).findAll();
     }
 
@@ -113,7 +113,7 @@ class UserServiceTest {
         Optional<User> foundUser = Optional.ofNullable(userService.findById(2l));
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user2);
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(userService,times(1)).findById(2l);
     }
 
@@ -125,7 +125,7 @@ class UserServiceTest {
         User savedUser = userService.save(user);
         assertThat(savedUser).isNotNull();
         assertThat(savedUser).isEqualTo(user);
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(userService,times(1)).save(user);
     }
 
@@ -134,7 +134,7 @@ class UserServiceTest {
         /* get the result and make sure its what was expected */
         userService.deleteById(1l);
         assertThat(userService.findById(1l)).isNull();
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(userService,times(1)).deleteById(1l);
     }
 
@@ -146,7 +146,7 @@ class UserServiceTest {
         Optional<User> foundUser = userService.findByFullName("John Test");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user);
-        /* make sure that the repository function was actually called */
+        /* make sure that the seervice function was actually called */
         verify(userService,times(1)).findByFullName("John Test");
     }
 
@@ -158,7 +158,7 @@ class UserServiceTest {
         Optional<User> foundUser = userService.findByEmail("alice@mail.com");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user2);
-        /* make sure that the repository function was actually called */
+        /* make sure that the service function was actually called */
         verify(userService,times(1)).findByEmail("alice@mail.com");
     }
 
@@ -178,7 +178,7 @@ class UserServiceTest {
         assertThat(foundEmployers).isNotNull();
         assertThat(foundEmployers).hasSize(1);
         assertThat(foundEmployers).contains(user2);
-        /* make sure the repository method was actually called */
+        /* make sure the service method was actually called */
         verify(userService, times(1)).findByRoles_Name("STUDENT");
         verify(userService, times(1)).findByRoles_Name("EMPLOYER");
     }

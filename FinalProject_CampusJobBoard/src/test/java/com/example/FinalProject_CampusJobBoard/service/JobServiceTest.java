@@ -15,7 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -86,6 +90,17 @@ class JobServiceTest {
 
     @Test
     void findAll() {
+        /* create the list of jobs and configure mockito behaviour */
+        List<Job> jobs = List.of(job,job2);
+        when(service.findAll()).thenReturn(jobs);
+        /* get the result and make sure its what was expected */
+        List<Job> foundJobs = service.findAll();
+        assertThat(foundJobs).isNotNull();
+        assertThat(foundJobs).hasSize(2);
+        assertThat(foundJobs).contains(job);
+        assertThat(foundJobs).contains(job2);
+        /* make sure the service method was actually called */
+        verify(service,times(1)).findAll();
     }
 
     @Test
