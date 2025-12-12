@@ -139,6 +139,23 @@ class JobServiceTest {
 
     @Test
     void testFindByStatus() {
+        /* create the job lists and configure mockito behaviour */
+        List<Job> approvedJobs = List.of(job);
+        List<Job> rejectedJobs = List.of(job2);
+        when(service.findByStatus(status)).thenReturn(approvedJobs);
+        when(service.findByStatus(status2)).thenReturn(rejectedJobs);
+        /* get the result and make sure its what was expected */
+        List<Job> foundApproved = service.findByStatus(status);
+        List<Job> foundRejected = service.findByStatus(status2);
+        assertThat(foundApproved).isNotNull();
+        assertThat(foundApproved).hasSize(1);
+        assertThat(foundApproved).contains(job);
+        assertThat(foundRejected).isNotNull();
+        assertThat(foundRejected).hasSize(1);
+        assertThat(foundRejected).contains(job2);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findByStatus(status);
+        verify(service,times(1)).findByStatus(status2);
     }
 
     @Test

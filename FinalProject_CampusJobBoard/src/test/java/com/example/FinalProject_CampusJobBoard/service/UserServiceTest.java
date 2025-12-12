@@ -146,7 +146,7 @@ class UserServiceTest {
         Optional<User> foundUser = userService.findByFullName("John Test");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user);
-        /* make sure that the seervice function was actually called */
+        /* make sure that the service function was actually called */
         verify(userService,times(1)).findByFullName("John Test");
     }
 
