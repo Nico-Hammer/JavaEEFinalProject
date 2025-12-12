@@ -243,7 +243,21 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testUpdateJob_RejectedToPending() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(3L)).thenReturn(rejectedJob);
+        when(jobService.saveJob(any(Job.class))).thenReturn(rejectedJob);
 
+        mockMvc.perform(post("/employer/jobs/3/edit")
+                        .with(csrf())
+                        .param("title", "Updated Rejected Job")
+                        .param("description", "Updated Description"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/employer/myjobs"));
+
+        verify(jobService, times(1)).findById(3L);
+        verify(jobService, times(1)).saveJob(any(Job.class));
+        // Verify status changed from REJECTED to PENDING
+        assert rejectedJob.getStatus() == JobStatus.PENDING;
     }
 
     @Test
