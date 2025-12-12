@@ -2,6 +2,7 @@ package com.example.FinalProject_CampusJobBoard.controller;
 
 import com.example.FinalProject_CampusJobBoard.Security.user.CustomUserDetailsService;
 import com.example.FinalProject_CampusJobBoard.entity.Role;
+import com.example.FinalProject_CampusJobBoard.entity.User;
 import com.example.FinalProject_CampusJobBoard.service.RoleService;
 import com.example.FinalProject_CampusJobBoard.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 
 import static org.mockito.Mockito.reset;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
 public class AuthControllerTest {
@@ -58,7 +60,7 @@ public class AuthControllerTest {
 
     @AfterEach
     void tearDown(){
-        reset(userDetailsService, userService, roleService, passwordEncoder)
+        reset(userDetailsService, userService, roleService, passwordEncoder);
 
         testUser = null;
         studentRole = null;
@@ -66,7 +68,9 @@ public class AuthControllerTest {
 
     @Test
     void testShowHomePage() throws Exception{
-
+        mockMvc.perform(get("/jobBoard/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("public/home"));
     }
 
     @Test
