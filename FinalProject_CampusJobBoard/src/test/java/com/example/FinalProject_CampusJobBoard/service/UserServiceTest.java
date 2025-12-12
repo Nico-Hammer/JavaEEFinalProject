@@ -14,9 +14,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -93,6 +95,17 @@ class UserServiceTest {
 
     @Test
     void testFindAll() {
+        /* create the list of users and set up the mockito behaviour */
+        List<User> users = List.of(user, user2);
+        when(repo.findAll()).thenReturn(users);
+        /* get the result and make sure its what was expected */
+        List<User> result = userService.findAll();
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        assertThat(result).contains(user);
+        assertThat(result).contains(user2);
+        /* make sure the repository method was actually called */
+        verify(repo, times(1)).findAll();
     }
 
     @Test
@@ -121,10 +134,12 @@ class UserServiceTest {
 
     @Test
     void testEmailExists() {
-        when(repo.findByEmail("john@mail.com")).thenReturn(Optional.of(user)); // configure mockito behaviour
+        /* configure mockito behaviour */
+        when(repo.findByEmail("john@mail.com")).thenReturn(Optional.of(user));
         /* get the result and make sure its what was expected */
         boolean exists = userService.emailExists("john@mail.com");
         assertTrue(exists);
-        verify(repo, times(1)).findByEmail("john@mail.com"); // verify that the method was actually called
+        /* verify that the method was actually called */
+        verify(repo, times(1)).findByEmail("john@mail.com");
     }
 }
