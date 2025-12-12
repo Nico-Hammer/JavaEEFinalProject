@@ -375,6 +375,29 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testViewAllApplications_MultipleJobs() throws Exception {
+        Job job2 = new Job();
+        job2.setJob_id(4L);
+        job2.setEmployer(testEmployer);
 
+        JobApplication app2 = new JobApplication();
+        app2.setJobApplication_id(2L);
+        app2.setJob(job2);
+
+        List<Job> employerJobs = List.of(employerJob, job2);
+        List<JobApplication> apps1 = Collections.singletonList(application);
+        List<JobApplication> apps2 = Collections.singletonList(app2);
+
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findByEmployer(testEmployer)).thenReturn(employerJobs);
+        when(applicationService.findByJob(employerJob)).thenReturn(apps1);
+        when(applicationService.findByJob(job2)).thenReturn(apps2);
+
+        mockMvc.perform(get("/employer/applications"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/applicants"))
+                .andExpect(model().attributeExists("applications"));
+
+        verify(applicationService, times(1)).findByJob(employerJob);
+        verify(applicationService, times(1)).findByJob(job2);
     }
 }
