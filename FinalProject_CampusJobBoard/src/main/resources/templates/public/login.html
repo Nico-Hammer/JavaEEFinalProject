@@ -5,26 +5,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Campus Job Portal</title>
+    <style>
+        .container {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .login-card h1 {
+            color: #1976D2;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1976D2;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1565C0;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #c62828;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #1976D2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Login</h1>
+<div class="container">
+    <div class="login-card">
+        <h1>Login</h1>
 
-    <form th:action="@{/jobBoard/login}" method="post">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="username" required />
+        <div th:if="${param.error}" class="error-message">
+            Invalid email or password. Please try again.
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required />
-        </div>
-        <button type="submit">Login</button>
-    </form>
 
-    <p>
-        Don't have an account? <a th:href="@{/jobBoard/register}">Register here</a>
-    </p>
+        <div th:if="${param.logout}" class="success-message">
+            You have been logged out successfully.
+        </div>
+
+        <div th:if="${param.registered}" class="success-message">
+            Registration successful! Please login.
+        </div>
+
+        <form th:action="@{/jobBoard/login}" method="post">
+            <!-- CSRF token removed since CSRF is disabled in SecurityConfig -->
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="username" required autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <div class="register-link">
+            <p>Don't have an account? <a th:href="@{/jobBoard/register}">Register here</a></p>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
