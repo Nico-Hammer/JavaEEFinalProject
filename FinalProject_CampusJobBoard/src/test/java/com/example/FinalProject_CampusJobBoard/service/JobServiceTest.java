@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +106,14 @@ class JobServiceTest {
 
     @Test
     void testFindById() {
+        /* configure mockito behaviour */
+        when(service.findById(2l)).thenReturn(job2);
+        /* get the result and make sure its what was expected */
+        Job foundJob = service.findById(2l);
+        assertThat(foundJob).isNotNull();
+        assertThat(foundJob).isEqualTo(job2);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findById(2l);
     }
 
     @Test
