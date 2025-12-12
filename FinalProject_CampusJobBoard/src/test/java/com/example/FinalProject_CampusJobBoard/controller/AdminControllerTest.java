@@ -109,7 +109,15 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testListAllUsers_EmptyList() throws Exception {
+        when(userService.findAll()).thenReturn(Collections.emptyList());
 
+        mockMvc.perform(get("/admin/users"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/users"))
+                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attribute("users", Collections.emptyList()));
+
+        verify(userService, times(1)).findAll();
     }
 
     @Test
