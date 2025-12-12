@@ -338,7 +338,22 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testViewAllApplications() throws Exception {
+        List<Job> employerJobs = Collections.singletonList(employerJob);
+        List<JobApplication> applications = Collections.singletonList(application);
 
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findByEmployer(testEmployer)).thenReturn(employerJobs);
+        when(applicationService.findByJob(employerJob)).thenReturn(applications);
+
+        mockMvc.perform(get("/employer/applications"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/applicants"))
+                .andExpect(model().attributeExists("applications"))
+                .andExpect(model().attribute("applications", applications));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).findByEmployer(testEmployer);
+        verify(applicationService, times(1)).findByJob(employerJob);
     }
 
     @Test
