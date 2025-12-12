@@ -109,7 +109,16 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testListApprovedJobs() throws Exception {
+        List<Job> approvedJobs = Collections.singletonList(approvedJob);
+        when(jobService.findByStatus(JobStatus.APPROVED)).thenReturn(approvedJobs);
 
+        mockMvc.perform(get("/student/jobs"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/jobs"))
+                .andExpect(model().attributeExists("jobs"))
+                .andExpect(model().attribute("jobs", approvedJobs));
+
+        verify(jobService, times(1)).findByStatus(JobStatus.APPROVED);
     }
 
     @Test
