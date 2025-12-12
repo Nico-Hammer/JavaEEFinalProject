@@ -190,6 +190,13 @@ class ApplicationServiceTest {
 
     @Test
     void testExistsByJobAndStudent() {
+        /* configure mockito behaviour */
+        when(service.existsByJobAndStudent(job,student)).thenReturn(true);
+        /* get the result and make sure its what was expected */
+        boolean exists = service.existsByJobAndStudent(job,student);
+        assertTrue(exists);
+        /* make sure that the service method actually called */
+        verify(service,times(1)).existsByJobAndStudent(job,student);
     }
 
     @Test
