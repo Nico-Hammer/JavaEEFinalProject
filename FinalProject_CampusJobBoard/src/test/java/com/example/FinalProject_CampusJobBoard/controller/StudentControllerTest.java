@@ -244,7 +244,19 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testViewMyApplications_Success() throws Exception {
+        List<JobApplication> applications = Collections.singletonList(application);
 
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testStudent);
+        when(applicationService.findByStudent(testStudent)).thenReturn(applications);
+
+        mockMvc.perform(get("/student/applications"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/my-applications"))
+                .andExpect(model().attributeExists("applications"))
+                .andExpect(model().attribute("applications", applications));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(applicationService, times(1)).findByStudent(testStudent);
     }
 
     @Test
