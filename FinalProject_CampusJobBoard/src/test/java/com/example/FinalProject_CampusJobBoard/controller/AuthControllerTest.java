@@ -119,8 +119,8 @@ public class AuthControllerTest {
                 .param("email", "test@example.com")
                 .param("password", "password123")
                 .param("roleType", "STUDENT"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("User registered successfully!"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/jobBoard/login?registered=true"));
 
         // Verify the interactions
         verify(userService, times(1)).findByEmail("test@example.com");
@@ -146,7 +146,8 @@ public class AuthControllerTest {
                         .param("email", "employer@example.com")
                         .param("password", "password123")
                         .param("roleType", "EMPLOYER"))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/jobBoard/login?registered=true"));
 
         verify(roleService, times(1)).getOrCreateRole("EMPLOYER");
     }
@@ -181,7 +182,8 @@ public class AuthControllerTest {
                         .param("email", "test@example.com")
                         .param("password", "password123")
                         .param("roleType", "INVALID_ROLE"))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/jobBoard/login?registered=true"));
 
         verify(roleService, times(1)).getOrCreateRole("STUDENT");
     }
