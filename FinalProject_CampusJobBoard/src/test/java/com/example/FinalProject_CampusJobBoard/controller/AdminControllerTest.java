@@ -261,7 +261,14 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testActivateUser_NotFound() throws Exception {
+        when(userService.findById(999L)).thenReturn(null);
 
+        mockMvc.perform(post("/admin/users/999/activate")
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+
+        verify(userService, times(1)).findById(999L);
+        verify(userService, never()).save(any());
     }
 
     @Test
