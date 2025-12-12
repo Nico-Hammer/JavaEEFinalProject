@@ -293,7 +293,18 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testDeleteJob_Success() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(1L)).thenReturn(employerJob);
+        doNothing().when(jobService).deleteById(1L);
 
+        mockMvc.perform(post("/employer/jobs/1/delete")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/employer/myjobs"));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).findById(1L);
+        verify(jobService, times(1)).deleteById(1L);
     }
 
     @Test
