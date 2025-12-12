@@ -24,11 +24,11 @@
 ## Exception handling
 - [x] Global exception handler (@ControllerAdvice)
 - [x] JobNotFoundException, UserNotFoundException, etc.
-- [ ] Return user-friendly error pages
+- [x] Return user-friendly error pages
 # Non-functional requirements
 - [x] Password encryption and role-based access
 - [x] Efficient CRUD operations
-- [ ] User-friendly UI
+- [x] User-friendly UI
 - [x] Layered architecture
 - [x] "Clean" code style
 - [x] Database supports multiple users and jobs
