@@ -28,13 +28,9 @@ class UserServiceTest {
 
     @MockitoBean
     private UserRepository repo;
-    @MockitoBean
-    private JobRepository jobRepo;
 
-    @Autowired
+    @MockitoBean
     private UserService userService;
-    @Autowired
-    private JobService jobService;
 
     private User user;
     private User user2;
@@ -80,7 +76,6 @@ class UserServiceTest {
     @AfterEach
     void tearDown() {
         repo.deleteAll();
-        jobRepo.deleteAll();
 
         user = null;
         user2 = null;
@@ -97,7 +92,7 @@ class UserServiceTest {
     void testFindAll() {
         /* create the list of users and set up the mockito behaviour */
         List<User> users = List.of(user, user2);
-        when(repo.findAll()).thenReturn(users);
+        when(userService.findAll()).thenReturn(users);
         /* get the result and make sure its what was expected */
         List<User> result = userService.findAll();
         assertThat(result).isNotNull();
@@ -105,59 +100,64 @@ class UserServiceTest {
         assertThat(result).contains(user);
         assertThat(result).contains(user2);
         /* make sure the repository method was actually called */
-        verify(repo, times(1)).findAll();
+        verify(userService, times(1)).findAll();
     }
 
     @Test
     void testFindById() {
         /* configure mockito behaviour */
-        when(repo.findById(2l)).thenReturn(Optional.of(user2));
+        when(userService.findById(2l)).thenReturn(user2);
         /* get the result and make sure its what was expected */
-        Optional<User> foundUser = repo.findById(2l);
+        Optional<User> foundUser = Optional.ofNullable(userService.findById(2l));
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user2);
         /* make sure that the repository function was actually called */
-        verify(repo,times(1)).findById(2l);
+        verify(userService,times(1)).findById(2l);
     }
 
     @Test
     void testSave() {
         /* configure mockito behaviour */
-        when(repo.save(user)).thenReturn(user);
+        when(userService.save(user)).thenReturn(user);
         /* get the result and make sure its what was expected */
-        User savedUser = repo.save(user);
+        User savedUser = userService.save(user);
         assertThat(savedUser).isNotNull();
         assertThat(savedUser).isEqualTo(user);
         /* make sure that the repository function was actually called */
-        verify(repo,times(1)).save(user);
+        verify(userService,times(1)).save(user);
     }
 
     @Test
     void testDeleteById() {
+        /* get the result and make sure its what was expected */
+        userService.deleteById(1l);
+        assertThat(userService.findById(1l)).isNull();
+        /* make sure that the repository function was actually called */
+        verify(userService,times(1)).deleteById(1l);
     }
 
     @Test
     void testFindByFullName() {
         /* configure mockito behaviour */
-        when(repo.findByFullName("John Test")).thenReturn(Optional.of(user));
+        when(userService.findByFullName("John Test")).thenReturn(Optional.of(user));
         /* get the result and make sure its what was expected */
-        Optional<User> foundUser = repo.findByFullName("John Test");
+        Optional<User> foundUser = userService.findByFullName("John Test");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user);
         /* make sure that the repository function was actually called */
-        verify(repo,times(1)).findByFullName("John Test");
+        verify(userService,times(1)).findByFullName("John Test");
     }
 
     @Test
     void testFindByEmail() {
         /* configure mockito behaviour */
-        when(repo.findByEmail("alice@mail.com")).thenReturn(Optional.of(user2));
+        when(userService.findByEmail("alice@mail.com")).thenReturn(Optional.of(user2));
         /* get the result and make sure its what was expected */
-        Optional<User> foundUser = repo.findByEmail("alice@mail.com");
+        Optional<User> foundUser = userService.findByEmail("alice@mail.com");
         assertThat(foundUser).isPresent();
         assertThat(foundUser).contains(user2);
         /* make sure that the repository function was actually called */
-        verify(repo,times(1)).findByEmail("alice@mail.com");
+        verify(userService,times(1)).findByEmail("alice@mail.com");
     }
 
     @Test
@@ -165,11 +165,11 @@ class UserServiceTest {
         /* create the list of users and set up the mockito behaviour */
         List<User> studentUsers = List.of(user);
         List<User> employerUsers = List.of(user2);
-        when(repo.findByRoles_Name("STUDENT")).thenReturn(studentUsers);
-        when(repo.findByRoles_Name("EMPLOYER")).thenReturn(employerUsers);
+        when(userService.findByRoles_Name("STUDENT")).thenReturn(studentUsers);
+        when(userService.findByRoles_Name("EMPLOYER")).thenReturn(employerUsers);
         /* get the result and make sure its what was expected */
-        List<User> foundStudents = repo.findByRoles_Name("STUDENT");
-        List<User> foundEmployers = repo.findByRoles_Name("EMPLOYER");
+        List<User> foundStudents = userService.findByRoles_Name("STUDENT");
+        List<User> foundEmployers = userService.findByRoles_Name("EMPLOYER");
         assertThat(foundStudents).isNotNull();
         assertThat(foundStudents).hasSize(1);
         assertThat(foundStudents).contains(user);
@@ -177,8 +177,8 @@ class UserServiceTest {
         assertThat(foundEmployers).hasSize(1);
         assertThat(foundEmployers).contains(user2);
         /* make sure the repository method was actually called */
-        verify(repo, times(1)).findByRoles_Name("STUDENT");
-        verify(repo, times(1)).findByRoles_Name("EMPLOYER");
+        verify(userService, times(1)).findByRoles_Name("STUDENT");
+        verify(userService, times(1)).findByRoles_Name("EMPLOYER");
     }
 
     @Test
