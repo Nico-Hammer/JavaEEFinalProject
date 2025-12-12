@@ -146,6 +146,14 @@ class ApplicationServiceTest {
 
     @Test
     void testSave() {
+        /* configure mockito behaviour */
+        when(service.save(application2)).thenReturn(application2);
+        /* get the result and make sure its what was expected */
+        JobApplication savedJobApplication = service.save(application2);
+        assertThat(savedJobApplication).isNotNull();
+        assertThat(savedJobApplication).isEqualTo(application2);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).save(application2);
     }
 
     @Test
