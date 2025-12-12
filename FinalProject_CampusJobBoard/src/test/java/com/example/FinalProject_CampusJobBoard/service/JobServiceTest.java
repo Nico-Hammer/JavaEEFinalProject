@@ -117,7 +117,15 @@ class JobServiceTest {
     }
 
     @Test
-    void testFaveJob() {
+    void testSaveJob() {
+        /* configure mockito behaviour */
+        when(service.saveJob(job)).thenReturn(job);
+        /* get the result and make sure its what was expected */
+        Job savedJob = service.saveJob(job);
+        assertThat(savedJob).isNotNull();
+        assertThat(savedJob).isEqualTo(job);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).saveJob(job);
     }
 
     @Test
