@@ -167,6 +167,25 @@ class ApplicationServiceTest {
 
     @Test
     void testFindByStudent() {
+        /* create the job lists and configure mockito behaviour */
+        List<JobApplication> firstStudent = List.of(application);
+        List<JobApplication> secondStudent = List.of(application2);
+        when(service.findByStudent(student)).thenReturn(firstStudent);
+        when(service.findByStudent(student2)).thenReturn(secondStudent);
+        /* get the result and make sure its what was expected */
+        List<JobApplication> foundFirstStudent = service.findByStudent(student);
+        List<JobApplication> foundSecondStudent = service.findByStudent(student2);
+        assertThat(foundFirstStudent).isNotNull();
+        assertThat(foundFirstStudent).hasSize(1);
+        assertThat(foundFirstStudent).contains(application);
+        assertThat(foundFirstStudent.get(0).getStudent()).isEqualTo(student);
+        assertThat(foundSecondStudent).isNotNull();
+        assertThat(foundSecondStudent).hasSize(1);
+        assertThat(foundSecondStudent).contains(application2);
+        assertThat(foundSecondStudent.get(0).getStudent()).isEqualTo(student2);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findByStudent(student);
+        verify(service,times(1)).findByStudent(student2);
     }
 
     @Test
