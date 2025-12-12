@@ -82,7 +82,10 @@ public class AuthControllerTest {
 
     @Test
     void testShowRegisterForm() throws Exception{
-
+        mockMvc.perform(get("/jobBoard/register"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("public/register"))
+                .andExpect(model().attributeExists("user"));
     }
 
     @Test
