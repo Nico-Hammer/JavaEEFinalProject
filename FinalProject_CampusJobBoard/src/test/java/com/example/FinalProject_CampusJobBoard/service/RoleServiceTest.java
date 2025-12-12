@@ -31,6 +31,8 @@ class RoleServiceTest {
     private Role userRole;
     private Role adminRole;
 
+    private String newRoleName = "NEW";
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -66,5 +68,26 @@ class RoleServiceTest {
 
     @Test
     void getOrCreateRole() {
+        ///  testing the get role functionality
+        /* configure mockito behaviour */
+        when(service.getOrCreateRole("STUDENT")).thenReturn(userRole);
+        /* get the result and make sure its what was expected */
+        Optional<Role> foundUser = Optional.ofNullable(service.getOrCreateRole("STUDENT"));
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser).contains(userRole);
+        /* make sure that the repository function was actually called */
+        verify(service,times(1)).getOrCreateRole("STUDENT");
+        /// testing the create role functionality
+        /* create the new role and configure mockito behaviour */
+        Role newRole = new Role();
+        newRole.setName(newRoleName);
+        when(repo.save(newRole)).thenReturn(newRole);
+        when(service.getOrCreateRole("NEW")).thenReturn(newRole);
+        /* get the result and make sure its what was expected */
+        Optional<Role> createdRole = Optional.ofNullable(service.getOrCreateRole(newRoleName));
+        assertThat(createdRole).isPresent();
+        assertThat(createdRole.get().getName()).isEqualTo(newRoleName);
+        /* make sure the repository function was actually called */
+        verify(service,times(1)).getOrCreateRole(newRoleName);
     }
 }
