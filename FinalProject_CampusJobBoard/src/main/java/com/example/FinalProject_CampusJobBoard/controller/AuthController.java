@@ -74,7 +74,7 @@ public class AuthController {
         user.setRoles(Collections.singleton(userRole));
 
         userService.save(user);
-        return "User registered successfully!";
+        return "redirect:/jobBoard/login?registered=true";
     }
 
     @GetMapping("/login")
