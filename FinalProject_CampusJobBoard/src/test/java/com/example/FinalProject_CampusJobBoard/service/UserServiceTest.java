@@ -14,9 +14,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -42,9 +44,17 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
+        userRole = new Role();
+        studentRole = new Role();
+        employerRole = new Role();
+
         userRole.setName("USER");
         studentRole.setName("STUDENT");
         employerRole.setName("EMPLOYER");
+
+        studentRoles = new HashSet<>();
+        employerRoles = new HashSet<>();
+
         studentRoles.add(userRole);
         studentRoles.add(studentRole);
         employerRoles.add(userRole);
@@ -82,34 +92,39 @@ class UserServiceTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
     }
 
     @Test
-    void findById() {
+    void testFindById() {
     }
 
     @Test
-    void save() {
+    void testSave() {
     }
 
     @Test
-    void deleteById() {
+    void testDeleteById() {
     }
 
     @Test
-    void findByFullName() {
+    void testFindByFullName() {
     }
 
     @Test
-    void findByEmail() {
+    void testFindByEmail() {
     }
 
     @Test
-    void findByRoles_Name() {
+    void testFindByRoles_Name() {
     }
 
     @Test
-    void emailExists() {
+    void testEmailExists() {
+        when(repo.findByEmail("john@mail.com")).thenReturn(Optional.of(user)); // configure mockito behaviour
+        /* get the result and make sure its what was expected */
+        boolean exists = userService.emailExists("john@mail.com");
+        assertTrue(exists);
+        verify(repo, times(1)).findByEmail("john@mail.com"); // verify that the method was actually called
     }
 }
