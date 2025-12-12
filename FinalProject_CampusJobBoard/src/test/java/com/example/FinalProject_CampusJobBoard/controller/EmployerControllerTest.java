@@ -149,7 +149,10 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testShowCreateJobForm() throws Exception {
-
+        mockMvc.perform(get("/employer/jobs/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/job-form"))
+                .andExpect(model().attributeExists("job"));
     }
 
     @Test
