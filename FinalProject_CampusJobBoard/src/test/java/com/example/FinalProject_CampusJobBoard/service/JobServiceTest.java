@@ -160,6 +160,23 @@ class JobServiceTest {
 
     @Test
     void testFindByEmployer() {
+        /* create the job lists and configure mockito behaviour */
+        List<Job> employerJobs = List.of(job);
+        List<Job> employer2Jobs = List.of(job2);
+        when(service.findByEmployer(user)).thenReturn(employerJobs);
+        when(service.findByEmployer(user2)).thenReturn(employer2Jobs);
+        /* get the result and make sure its what was expected */
+        List<Job> foundEmployer = service.findByEmployer(user);
+        List<Job> foundEmployer2 = service.findByEmployer(user2);
+        assertThat(foundEmployer).isNotNull();
+        assertThat(foundEmployer).hasSize(1);
+        assertThat(foundEmployer).contains(job);
+        assertThat(foundEmployer2).isNotNull();
+        assertThat(foundEmployer2).hasSize(1);
+        assertThat(foundEmployer2).contains(job2);
+        /* make sure that the service function was actually called */
+        verify(service,times(1)).findByEmployer(user);
+        verify(service,times(1)).findByEmployer(user2);
     }
 
     @Test
