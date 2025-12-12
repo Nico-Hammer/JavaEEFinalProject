@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -163,7 +164,19 @@ public class AuthControllerTest {
 
     @Test
     void testRegisterWithInvalidRole_DefaultToStudent() throws Exception{
+        when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(roleService.getOrCreateRole("STUDENT")).thenReturn(studentRole);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodePassword");
+        when(userService.save(any(User.class))).thenReturn(testUser);
 
+        mockMvc.perform(post("/jobBoard/register")
+                        .param("fullName", "Test User")
+                        .param("email", "test@example.com")
+                        .param("password", "password123")
+                        .param("roleType", "INVALID_ROLE"))
+                .andExpect(status().isOk());
+
+        verify(roleService, times(1)).getOrCreateRole("Student");
     }
 
     @Test
