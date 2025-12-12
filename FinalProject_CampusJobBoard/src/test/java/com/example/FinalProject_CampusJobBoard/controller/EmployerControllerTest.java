@@ -359,7 +359,17 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testViewAllApplications_EmptyList() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findByEmployer(testEmployer)).thenReturn(Collections.emptyList());
 
+        mockMvc.perform(get("/employer/applications"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/applicants"))
+                .andExpect(model().attributeExists("applications"))
+                .andExpect(model().attribute("applications", Collections.emptyList()));
+
+        verify(jobService, times(1)).findByEmployer(testEmployer);
+        verify(applicationService, never()).findByJob(any());
     }
 
     @Test
