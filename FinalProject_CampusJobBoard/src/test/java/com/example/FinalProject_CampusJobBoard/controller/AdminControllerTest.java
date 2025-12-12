@@ -184,7 +184,14 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testAcceptJobPosting_NotFound() throws Exception {
+        when(jobService.findById(999L)).thenReturn(null);
 
+        mockMvc.perform(post("/admin/pending-jobs/999/accept")
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+
+        verify(jobService, times(1)).findById(999L);
+        verify(jobService, never()).saveJob(any());
     }
 
     @Test
