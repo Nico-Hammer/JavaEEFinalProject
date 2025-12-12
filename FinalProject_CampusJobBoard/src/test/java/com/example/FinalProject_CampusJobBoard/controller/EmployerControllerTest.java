@@ -324,7 +324,15 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testDeleteJob_Unauthorized() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(2L)).thenReturn(otherEmployerJob);
 
+        mockMvc.perform(post("/employer/jobs/2/delete")
+                        .with(csrf()))
+                .andExpect(status().isUnauthorized());
+
+        verify(jobService, times(1)).findById(2L);
+        verify(jobService, never()).deleteById(any());
     }
 
     @Test
