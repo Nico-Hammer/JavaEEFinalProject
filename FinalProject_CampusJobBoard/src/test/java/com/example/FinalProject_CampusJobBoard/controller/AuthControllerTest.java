@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -21,11 +22,13 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTest {
 
     @Autowired
@@ -110,7 +113,8 @@ public class AuthControllerTest {
         when(userService.save(any(User.class))).thenReturn(testUser);
 
         // Perform the registration
-        mockMvc.perform(post("jobBoard/register")
+        mockMvc.perform(post("/jobBoard/register")
+                .with(csrf())
                 .param("fullName", "Test User")
                 .param("email", "test@example.com")
                 .param("password", "password123")
@@ -136,7 +140,8 @@ public class AuthControllerTest {
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userService.save(any(User.class))).thenReturn(testUser);
 
-        mockMvc.perform(post("jobBoard/register")
+        mockMvc.perform(post("/jobBoard/register")
+                        .with(csrf())
                         .param("fullName", "Employer User")
                         .param("email", "employer@example.com")
                         .param("password", "password123")
@@ -151,6 +156,7 @@ public class AuthControllerTest {
         when(userService.findByEmail("test@example.com")).thenReturn(Optional.of(testUser));
 
         mockMvc.perform(post("/jobBoard/register")
+                        .with(csrf())
                         .param("fullName", "Test User")
                         .param("email", "test@example.com")
                         .param("password", "password123")
@@ -170,18 +176,20 @@ public class AuthControllerTest {
         when(userService.save(any(User.class))).thenReturn(testUser);
 
         mockMvc.perform(post("/jobBoard/register")
+                        .with(csrf())
                         .param("fullName", "Test User")
                         .param("email", "test@example.com")
                         .param("password", "password123")
                         .param("roleType", "INVALID_ROLE"))
                 .andExpect(status().isOk());
 
-        verify(roleService, times(1)).getOrCreateRole("Student");
+        verify(roleService, times(1)).getOrCreateRole("STUDENT");
     }
 
     @Test
     void testRegisterWithValidationErrors() throws Exception{
         mockMvc.perform(post("/jobBoard/register")
+                        .with(csrf())
                         .param("fullName", "")  // Empty name should fail validation
                         .param("email", "invalid-email")  // Invalid email
                         .param("password", "123")  // Too short password
