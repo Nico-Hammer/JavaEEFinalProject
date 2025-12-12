@@ -185,7 +185,18 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testApplyToJob_Success() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testStudent);
+        when(jobService.findById(1l)).thenReturn(approvedJob);
+        doNothing().when(applicationService).createApplication(any(Job.class), any(User.class));
 
+        mockMvc.perform(post("/student/jobs/1/apply")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/student/jobs"));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).findById(1L);
+        verify(applicationService, times(1)).createApplication(approvedJob, testStudent);
     }
 
     @Test
