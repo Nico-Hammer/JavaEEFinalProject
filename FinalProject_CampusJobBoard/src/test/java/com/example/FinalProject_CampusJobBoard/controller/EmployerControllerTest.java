@@ -209,7 +209,13 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testShowEditJobForm_Unauthorized() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(2L)).thenReturn(otherEmployerJob);
 
+        mockMvc.perform(get("/employer/jobs/2/edit"))
+                .andExpect(status().isUnauthorized());
+
+        verify(jobService, times(1)).findById(2L);
     }
 
     @Test
