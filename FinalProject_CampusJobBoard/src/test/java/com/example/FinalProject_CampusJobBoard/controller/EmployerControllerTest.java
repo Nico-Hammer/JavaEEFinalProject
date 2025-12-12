@@ -20,8 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
-import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 
 @WebMvcTest(controllers = EmployerController.class)
@@ -112,7 +117,18 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testListMyJobs() throws Exception {
+        List<Job> jobs = Collections.singletonList(employerJob);
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findByEmployer(testEmployer)).thenReturn(jobs);
 
+        mockMvc.perform(get("/employer/myjobs"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/my-jobs"))
+                .andExpect(model().attributeExists("jobs"))
+                .andExpect(model().attribute("jobs", jobs));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).findByEmployer(testEmployer);
     }
 
     @Test
