@@ -5,6 +5,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${job.title + ' - Job Details'}">Job Details</title>
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            background: #1976D2;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .nav-links a:hover {
+            background: #1565C0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .job-details {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .job-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1976D2;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .job-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+
+        .job-meta div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .job-meta strong {
+            color: #666;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .job-meta span {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .job-description {
+            margin-bottom: 2rem;
+        }
+
+        .job-description h3 {
+            color: #1976D2;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .job-description p {
+            color: #555;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #1976D2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #1565C0;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #c62828;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2e7d32;
+        }
+    </style>
 </head>
 <body>
 <!-- Include header fragment -->
@@ -17,24 +147,32 @@
         <a th:href="@{/logout}">Logout</a>
     </div>
 
+    <div th:if="${error}" class="error-message" th:text="${error}"></div>
+    <div th:if="${success}" class="success-message" th:text="${success}"></div>
+
     <div class="job-details" th:if="${job}">
         <div class="job-title" th:text="${job.title}">Job Title</div>
 
         <div class="job-meta">
             <div th:if="${job.category}">
-                <strong>Category:</strong> <span th:text="${job.category}"></span>
+                <strong>Category</strong>
+                <span th:text="${job.category}"></span>
             </div>
             <div th:if="${job.location}">
-                <strong>Location:</strong> <span th:text="${job.location}"></span>
+                <strong>Location</strong>
+                <span th:text="${job.location}"></span>
             </div>
             <div th:if="${job.salary}">
-                <strong>Salary:</strong> <span th:text="${'$' + #numbers.formatDecimal(job.salary, 0, 'COMMA', 2, 'POINT')}"></span>
+                <strong>Salary</strong>
+                <span th:text="${'$' + #numbers.formatDecimal(job.salary, 0, 'COMMA', 2, 'POINT')}"></span>
             </div>
             <div th:if="${job.deadline}">
-                <strong>Deadline:</strong> <span th:text="${#temporals.format(job.deadline, 'MMM dd, yyyy')}"></span>
+                <strong>Deadline</strong>
+                <span th:text="${#temporals.format(job.deadline, 'MMM dd, yyyy')}"></span>
             </div>
             <div th:if="${job.employer}">
-                <strong>Employer:</strong> <span th:text="${job.employer.fullName}"></span>
+                <strong>Employer</strong>
+                <span th:text="${job.employer.fullName}"></span>
             </div>
         </div>
 
