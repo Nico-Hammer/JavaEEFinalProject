@@ -126,6 +126,13 @@ class UserServiceTest {
 
     @Test
     void testFindByEmail() {
+        /* configure mockito behaviour */
+        when(repo.findByEmail("alice@mail.com")).thenReturn(Optional.of(user2));
+        /* get the result and make sure its what was expected */
+        Optional<User> foundUser = repo.findByEmail("alice@mail.com");
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser).contains(user2);
+        verify(repo,times(1)).findByEmail("alice@mail.com");
     }
 
     @Test
