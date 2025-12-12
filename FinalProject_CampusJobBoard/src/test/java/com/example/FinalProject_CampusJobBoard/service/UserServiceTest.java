@@ -110,6 +110,14 @@ class UserServiceTest {
 
     @Test
     void testFindById() {
+        /* configure mockito behaviour */
+        when(repo.findById(2l)).thenReturn(Optional.of(user2));
+        /* get the result and make sure its what was expected */
+        Optional<User> foundUser = repo.findById(2l);
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser).contains(user2);
+        /* make sure that the repository function was actually called */
+        verify(repo,times(1)).findById(2l);
     }
 
     @Test
