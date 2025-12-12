@@ -25,7 +25,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
 
@@ -158,7 +160,22 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testCreateJob() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.saveJob(any(Job.class))).thenReturn(employerJob);
 
+        mockMvc.perform(post("/employer/jobs")
+                        .with(csrf())
+                        .param("title", "New Job")
+                        .param("description", "Description")
+                        .param("location", "Location")
+                        .param("salary", "50000")
+                        .param("category", "Tech")
+                        .param("deadline", "2025-12-31"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/employer/myjobs"));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).saveJob(any(Job.class));
     }
 
     @Test
