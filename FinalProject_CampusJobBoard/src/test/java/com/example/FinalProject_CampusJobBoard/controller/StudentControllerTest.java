@@ -278,6 +278,11 @@ class StudentControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testViewMyApplications_Unauthorized() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(null);
 
+        mockMvc.perform(get("/student/applications"))
+                .andExpect(status().isUnauthorized());
+
+        verify(applicationService, never()).findByStudent(any());
     }
 }
