@@ -181,7 +181,17 @@ class EmployerControllerTest {
     @Test
     @WithMockUser(roles = "EMPLOYER")
     void testShowEditJobForm_Success() throws Exception {
+        when(customUserDetailsService.getCurrentUser()).thenReturn(testEmployer);
+        when(jobService.findById(1L)).thenReturn(employerJob);
 
+        mockMvc.perform(get("/employer/jobs/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employer/job-form"))
+                .andExpect(model().attributeExists("job"))
+                .andExpect(model().attribute("job", employerJob));
+
+        verify(customUserDetailsService, times(1)).getCurrentUser();
+        verify(jobService, times(1)).findById(1L);
     }
 
     @Test
