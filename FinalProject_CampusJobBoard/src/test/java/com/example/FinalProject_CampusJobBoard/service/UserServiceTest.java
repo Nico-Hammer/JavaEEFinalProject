@@ -154,6 +154,23 @@ class UserServiceTest {
 
     @Test
     void testFindByRoles_Name() {
+        /* create the list of users and set up the mockito behaviour */
+        List<User> studentUsers = List.of(user);
+        List<User> employerUsers = List.of(user2);
+        when(repo.findByRoles_Name("STUDENT")).thenReturn(studentUsers);
+        when(repo.findByRoles_Name("EMPLOYER")).thenReturn(employerUsers);
+        /* get the result and make sure its what was expected */
+        List<User> foundStudents = repo.findByRoles_Name("STUDENT");
+        List<User> foundEmployers = repo.findByRoles_Name("EMPLOYER");
+        assertThat(foundStudents).isNotNull();
+        assertThat(foundStudents).hasSize(1);
+        assertThat(foundStudents).contains(user);
+        assertThat(foundEmployers).isNotNull();
+        assertThat(foundEmployers).hasSize(1);
+        assertThat(foundEmployers).contains(user2);
+        /* make sure the repository method was actually called */
+        verify(repo, times(1)).findByRoles_Name("STUDENT");
+        verify(repo, times(1)).findByRoles_Name("EMPLOYER");
     }
 
     @Test
