@@ -3,6 +3,9 @@ package com.example.FinalProject_CampusJobBoard.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -12,12 +15,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
+    @NotBlank(message = "Full name is required")
     @Column(nullable = false, length = 100)
     private String fullName;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
     @Column(nullable = false, length = 100, unique = true)
     private String email;
 
+    @NotBlank(message = "Password is required")
     @Column(nullable = false, length = 255)
     private String password;
 
