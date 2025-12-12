@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,6 +185,24 @@ class JobServiceTest {
 
     @Test
     void testFindByTitleContainingIgnoreCase() {
+        /* create the jobs list configure mockito behaviour */
+        List<Job> jobs = Arrays.asList(job);
+        when(service.findByTitleContainingIgnoreCase("job")).thenReturn(jobs);
+        when(service.findByTitleContainingIgnoreCase("Job")).thenReturn(jobs);
+        when(service.findByTitleContainingIgnoreCase("JOB")).thenReturn(jobs);
+        /* get the job by title ignoring case and make sure its the expected result */
+        List<Job> foundJob = service.findByTitleContainingIgnoreCase("job");
+        List<Job> foundJobCapital = service.findByTitleContainingIgnoreCase(("Job"));
+        List<Job> foundJobTitleCase = service.findByTitleContainingIgnoreCase("JOB");
+        assertThat(foundJob).hasSize(1);
+        assertThat(foundJob.get(0).getTitle()).isEqualTo(job.getTitle());
+        assertThat(foundJobCapital).hasSize(1);
+        assertThat(foundJobCapital.get(0).getTitle()).isEqualTo(job.getTitle());
+        assertThat(foundJobTitleCase).hasSize(1);
+        assertThat(foundJobTitleCase.get(0).getTitle()).isEqualTo(job.getTitle());
+        /* make sure that the service method was actually called */
+        verify(service,times(1)).findByTitleContainingIgnoreCase("Job");
+
     }
 
     @Test
