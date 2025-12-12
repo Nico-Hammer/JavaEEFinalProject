@@ -89,7 +89,7 @@ class JobServiceTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
         /* create the list of jobs and configure mockito behaviour */
         List<Job> jobs = List.of(job,job2);
         when(service.findAll()).thenReturn(jobs);
@@ -104,30 +104,30 @@ class JobServiceTest {
     }
 
     @Test
-    void findById() {
+    void testFindById() {
     }
 
     @Test
-    void saveJob() {
+    void testFaveJob() {
     }
 
     @Test
-    void deleteById() {
+    void testDeleteById() {
     }
 
     @Test
-    void findByStatus() {
+    void testFindByStatus() {
     }
 
     @Test
-    void findByEmployer() {
+    void testFindByEmployer() {
     }
 
     @Test
-    void findByTitleContainingIgnoreCase() {
+    void testFindByTitleContainingIgnoreCase() {
     }
 
     @Test
-    void findByCategory() {
+    void testFindByCategory() {
     }
 }
