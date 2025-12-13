@@ -20,7 +20,7 @@
 - [x] Prevent duplicate applications using validation or a unique constraint in the database
 ## Validation
 - [x] Use `@Valid` `@NotBlank` `@Email` `@Size` etc.
-- [ ] Display errors on thymeleaf forms
+- [x] Display errors on thymeleaf forms
 ## Exception handling
 - [x] Global exception handler (@ControllerAdvice)
 - [x] JobNotFoundException, UserNotFoundException, etc.
