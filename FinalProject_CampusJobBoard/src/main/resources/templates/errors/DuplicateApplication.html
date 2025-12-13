@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duplicate Application Error</title>
+    <style>
+        .error-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8d7da;
+            border-radius: 8px;
+        }
+        .error-container h1 {
+            color: #721c24;
+        }
+        .error-container p {
+            color: #721c24;
+            font-size: 1.2rem;
+        }
+        .error-container a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="error-container">
+    <h1>Duplicate Application Error</h1>
+    <p th:text="${errorMessage}">You have already applied for this job.</p>
+    <p><a href="/student/applications">Go back to applications</a></p>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

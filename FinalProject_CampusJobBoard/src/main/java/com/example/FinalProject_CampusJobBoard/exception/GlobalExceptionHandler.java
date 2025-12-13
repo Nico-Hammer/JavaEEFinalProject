@@ -1,42 +1,39 @@
 package com.example.FinalProject_CampusJobBoard.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
+public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateApplicationException.class)
-    public ResponseEntity<ErrorDetails> duplicateApplicationExceptionHandler(Exception ex){
-        ErrorDetails error = new ErrorDetails(0,ex.getMessage());
-        return new ResponseEntity<>(error,HttpStatus.CONFLICT);
+    public String handleDuplicateApplicationException(DuplicateApplicationException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "errors/DuplicateApplication";
     }
 
     @ExceptionHandler(JobNotFoundException.class)
-    public ResponseEntity<ErrorDetails> jobNotFoundExceptionHandler(Exception ex){
-        ErrorDetails error = new ErrorDetails(0,ex.getMessage());
-        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
+    public String handleJobNotFoundException(JobNotFoundException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "errors/JobNotFound";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorDetails> userNotFoundExceptionHandler(Exception ex){
-        ErrorDetails error = new ErrorDetails(0,ex.getMessage());
-        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
+    public String handleUserNotFoundException(UserNotFoundException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "errors/UserNotFound";
     }
 
     @ExceptionHandler(UnauthorizedUserException.class)
-    public ResponseEntity<ErrorDetails> unauthorizedUserExceptionHandler(Exception ex){
-        ErrorDetails error = new ErrorDetails(0,ex.getMessage());
-        return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
+    public String handleUnauthorizedUserException(UnauthorizedUserException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "errors/UnauthorizedUser";
     }
 
-    // Default case where an internal server error is returned
+    // Generic exception handler for internal errors
     @ExceptionHandler(Exception.class)
-    public ResponseEntity < ? > globalExceptionHandler(Exception ex) {
-        ErrorDetails errorModel = new ErrorDetails(0, ex.getMessage());
-        return new ResponseEntity< >(errorModel, HttpStatus.INTERNAL_SERVER_ERROR);
+    public String handleGlobalException(Exception ex, Model model) {
+        model.addAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
+        return "errors/GenericError";
     }
 }
